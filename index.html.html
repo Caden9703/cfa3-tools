@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CFA III — Curtis Holloway Compendium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=JetBrains+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080a0f;
+  --bg2:#0d1018;
+  --surface:#111520;
+  --surface2:#161c2a;
+  --surface3:#1c2336;
+  --border:#1e2640;
+  --border2:#26304a;
+  --text:#c8cfe8;
+  --text2:#8a94b8;
+  --text3:#4a5278;
+  --gold:#c9a84c;
+  --gold2:#e8c97a;
+  --gold3:rgba(201,168,76,0.12);
+  --blue:#4a7cf8;
+  --blue2:#6e96fa;
+  --teal:#2dd4bf;
+  --green:#34d399;
+  --red:#f87171;
+  --purple:#a78bfa;
+  --glow:rgba(74,124,248,0.06);
+  --ff-head:'Playfair Display',serif;
+  --ff-body:'Inter',sans-serif;
+  --ff-mono:'JetBrains Mono',monospace;
+}
+
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--ff-body);font-size:14px;overflow:hidden}
+
+/* ── LAYOUT ── */
+.shell{display:flex;flex-direction:column;height:100vh}
+
+/* ── HEADER ── */
+header{
+  display:flex;align-items:center;gap:0;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  position:relative;
+  flex-shrink:0;
+}
+header::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:.3;
+}
+.logo{
+  font-family:var(--ff-head);font-size:17px;font-weight:700;
+  color:var(--gold2);letter-spacing:.03em;
+  margin-right:32px;white-space:nowrap;padding:16px 0;
+}
+.logo span{color:var(--text3);font-weight:400;font-size:13px;font-family:var(--ff-body);margin-left:8px}
+.tabs{display:flex;gap:0;height:100%}
+.tab-btn{
+  padding:0 22px;height:56px;
+  font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text3);cursor:pointer;
+  border:none;background:none;font-family:var(--ff-body);
+  border-bottom:2px solid transparent;
+  transition:all .2s;white-space:nowrap;
+}
+.tab-btn:hover{color:var(--text2)}
+.tab-btn.active{color:var(--gold2);border-bottom-color:var(--gold)}
+.header-badge{
+  margin-left:auto;
+  font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text3);
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:4px;padding:4px 10px;
+}
+
+/* ── PAGES ── */
+.page{display:none;flex:1;overflow:hidden;flex-direction:column}
+.page.active{display:flex}
+
+/* ══════════════════════════════
+   EQUATION LIBRARY
+══════════════════════════════ */
+.lib-layout{display:flex;flex:1;overflow:hidden}
+
+/* Sidebar */
+.sidebar{
+  width:220px;flex-shrink:0;
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  overflow-y:auto;padding:20px 0;
+}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.sb-section{margin-bottom:8px}
+.sb-label{
+  font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text3);padding:8px 20px 4px;
+}
+.sb-btn{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  padding:9px 20px;font-size:12px;font-weight:400;color:var(--text2);
+  cursor:pointer;background:none;border:none;font-family:var(--ff-body);
+  transition:all .15s;border-left:2px solid transparent;
+}
+.sb-btn:hover{color:var(--text);background:var(--surface)}
+.sb-btn.active{color:var(--gold2);background:var(--surface);border-left-color:var(--gold)}
+.sb-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.sb-count{margin-left:auto;font-size:10px;color:var(--text3)}
+
+/* Main content area */
+.lib-main{flex:1;overflow-y:auto;padding:28px 32px}
+.lib-main::-webkit-scrollbar{width:5px}
+.lib-main::-webkit-scrollbar-track{background:transparent}
+.lib-main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* Search bar */
+.search-wrap{margin-bottom:28px;position:relative}
+.search-wrap input{
+  width:100%;padding:12px 16px 12px 40px;
+  background:var(--surface);
+  border:1px solid var(--border);border-radius:10px;
+  color:var(--text);font-family:var(--ff-body);font-size:14px;outline:none;
+  transition:border .2s;
+}
+.search-wrap input:focus{border-color:var(--border2)}
+.search-wrap input::placeholder{color:var(--text3)}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none}
+
+/* Section headers */
+.eq-section-header{
+  display:flex;align-items:center;gap:12px;margin-bottom:16px;margin-top:8px;
+}
+.eq-section-title{
+  font-family:var(--ff-head);font-size:16px;font-weight:600;color:var(--text);
+  letter-spacing:.01em;
+}
+.eq-section-line{flex:1;height:1px;background:var(--border)}
+.eq-section-tag{
+  font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 8px;border-radius:3px;
+}
+
+/* Cards */
+.eq-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
+
+.eq-card{
+  background:var(--surface);
+  border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;cursor:pointer;
+  transition:border-color .2s,background .2s;
+}
+.eq-card:hover{border-color:var(--border2)}
+.eq-card.open{border-color:var(--gold);background:var(--surface2)}
+
+.eq-card-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;gap:12px;
+}
+.eq-card-left{flex:1;min-width:0}
+.eq-card-name{
+  font-weight:500;font-size:13px;color:var(--text);
+  margin-bottom:2px;
+}
+.eq-card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.los-pill{
+  font-size:10px;font-weight:500;letter-spacing:.04em;
+  background:rgba(74,124,248,.12);color:var(--blue2);
+  border:1px solid rgba(74,124,248,.2);border-radius:4px;padding:2px 7px;
+}
+.cat-pill{
+  font-size:10px;color:var(--text3);
+}
+
+/* Formula preview (collapsed) */
+.formula-preview{
+  font-family:var(--ff-mono);font-size:12px;color:var(--gold);
+  background:var(--bg2);
+  padding:10px 18px;
+  border-top:1px solid var(--border);
+  letter-spacing:.01em;line-height:1.8;
+}
+.eq-card.open .formula-preview{display:none}
+
+/* Chevron */
+.chevron{
+  width:24px;height:24px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text3);transition:transform .25s;font-size:12px;
+}
+.eq-card.open .chevron{transform:rotate(180deg);color:var(--gold)}
+
+/* Expanded body */
+.eq-body{display:none;border-top:1px solid var(--border)}
+.eq-card.open .eq-body{display:block}
+
+.eq-formula-block{
+  background:var(--bg);
+  padding:20px 24px;
+  border-bottom:1px solid var(--border);
+  text-align:center;
+}
+/* Math rendered formulas */
+.math-display{
+  font-family:var(--ff-mono);
+  font-size:14px;color:var(--gold2);
+  line-height:2.2;letter-spacing:.02em;
+}
+.math-display .frac{
+  display:inline-flex;flex-direction:column;
+  align-items:center;vertical-align:middle;margin:0 3px;
+}
+.math-display .frac .num{border-bottom:1.5px solid var(--gold);padding:0 4px 2px;font-size:13px}
+.math-display .frac .den{padding:2px 4px 0;font-size:13px}
+.math-display sub{font-size:.65em;vertical-align:sub}
+.math-display sup{font-size:.65em;vertical-align:super}
+.math-display .sigma{font-size:18px;vertical-align:middle;margin:0 2px}
+.math-display .approx{margin:0 4px}
+
+/* Variable table */
+.eq-vars{padding:18px 24px;border-bottom:1px solid var(--border)}
+.vars-label{
+  font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:10px;
+}
+.var-row{
+  display:flex;align-items:baseline;gap:0;
+  padding:6px 0;border-bottom:1px solid var(--border);
+}
+.var-row:last-child{border-bottom:none}
+.var-sym{
+  font-family:var(--ff-mono);font-size:12px;color:var(--gold);
+  width:100px;flex-shrink:0;
+}
+.var-sym sub{font-size:.7em}
+.var-sym sup{font-size:.7em}
+.var-def{font-size:12px;color:var(--text2);line-height:1.5;flex:1}
+
+/* Rearrangements */
+.eq-rearrange{padding:14px 24px;border-bottom:1px solid var(--border)}
+.rearr-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.rearr-chip{
+  font-family:var(--ff-mono);font-size:11px;
+  background:var(--surface3);
+  border:1px solid var(--border2);border-radius:6px;
+  padding:5px 10px;color:var(--blue2);cursor:pointer;
+  transition:all .15s;
+}
+.rearr-chip sub{font-size:.7em}
+.rearr-chip sup{font-size:.7em}
+.rearr-chip:hover{border-color:var(--blue);color:var(--text)}
+
+/* Note / concept */
+.eq-note{padding:14px 24px}
+.eq-note p{font-size:12px;color:var(--text2);line-height:1.7;
+  border-left:2px solid var(--border2);padding-left:12px;
+}
+
+/* Card footer */
+.eq-footer{
+  padding:10px 24px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.ask-ai-btn{
+  font-size:11px;font-weight:500;
+  padding:6px 14px;border-radius:6px;cursor:pointer;
+  background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);
+  color:var(--gold);font-family:var(--ff-body);transition:all .2s;
+}
+.ask-ai-btn:hover{background:rgba(201,168,76,.18)}
+
+/* Concept cards */
+.concept-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  margin-bottom:10px;overflow:hidden;cursor:pointer;
+  transition:border-color .2s;
+}
+.concept-card:hover{border-color:var(--border2)}
+.concept-card.open{border-color:var(--purple)}
+.concept-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px}
+.concept-title{font-weight:500;font-size:13px;color:var(--text)}
+.concept-type{font-size:10px;color:var(--text3);margin-top:2px}
+.concept-body{display:none;padding:16px 20px;border-top:1px solid var(--border)}
+.concept-card.open .concept-body{display:block}
+.concept-body ul{list-style:none;display:flex;flex-direction:column;gap:6px}
+.concept-body li{
+  font-size:12px;color:var(--text2);line-height:1.6;
+  padding-left:14px;position:relative;
+}
+.concept-body li::before{
+  content:'›';position:absolute;left:0;color:var(--gold);font-weight:600;
+}
+.concept-body li b{color:var(--text);font-weight:500}
+.concept-chevron{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:11px;transition:transform .2s}
+.concept-card.open .concept-chevron{transform:rotate(180deg);color:var(--purple)}
+
+/* ══════════════════════════════
+   AI TUTOR
+══════════════════════════════ */
+.chat-page{display:flex;flex-direction:column;flex:1;overflow:hidden}
+.chat-topbar{
+  display:flex;align-items:center;gap:16px;
+  padding:10px 24px;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  flex-shrink:0;flex-wrap:wrap;
+}
+.topbar-group{display:flex;align-items:center;gap:8px}
+.topbar-label{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--text3)}
+select.model-sel{
+  padding:7px 12px;background:var(--surface2);
+  border:1px solid var(--border2);border-radius:8px;
+  color:var(--text);font-family:var(--ff-body);font-size:12px;
+  cursor:pointer;outline:none;
+}
+select.model-sel:focus{border-color:var(--gold)}
+.ctx-toggle{display:flex;align-items:center;gap:6px;cursor:pointer}
+.ctx-toggle input{accent-color:var(--gold)}
+.ctx-toggle label{font-size:11px;color:var(--text2);cursor:pointer}
+.clear-btn{
+  margin-left:auto;padding:6px 14px;
+  background:none;border:1px solid var(--border2);border-radius:6px;
+  color:var(--text3);font-size:11px;cursor:pointer;font-family:var(--ff-body);
+  transition:all .15s;
+}
+.clear-btn:hover{border-color:var(--border);color:var(--text2)}
+
+.chat-msgs{
+  flex:1;overflow-y:auto;padding:28px 32px;
+  display:flex;flex-direction:column;gap:20px;
+}
+.chat-msgs::-webkit-scrollbar{width:5px}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+.empty-chat{
+  margin:auto;text-align:center;max-width:560px;padding:40px 20px;
+}
+.empty-title{
+  font-family:var(--ff-head);font-size:24px;font-weight:600;
+  color:var(--text);margin-bottom:6px;
+}
+.empty-sub{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:28px}
+.quick-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.quick-q{
+  padding:8px 14px;
+  background:var(--surface);border:1px solid var(--border);border-radius:20px;
+  color:var(--text2);font-size:12px;cursor:pointer;
+  transition:all .15s;font-family:var(--ff-body);
+}
+.quick-q:hover{border-color:var(--gold);color:var(--gold)}
+
+.msg{max-width:82%}
+.msg.user{align-self:flex-end}
+.msg.assistant{align-self:flex-start}
+.msg-bubble{
+  padding:14px 18px;border-radius:14px;line-height:1.75;font-size:13px;
+  white-space:pre-wrap;word-break:break-word;
+}
+.msg.user .msg-bubble{
+  background:linear-gradient(135deg,#1e3a7a,#162d60);
+  border:1px solid rgba(74,124,248,.3);
+  border-bottom-right-radius:4px;color:#dce8ff;
+}
+.msg.assistant .msg-bubble{
+  background:var(--surface);border:1px solid var(--border2);
+  border-bottom-left-radius:4px;color:var(--text);
+}
+.msg-meta{font-size:10px;color:var(--text3);margin-top:5px;padding:0 4px;letter-spacing:.03em}
+.msg.user .msg-meta{text-align:right}
+
+.typing-wrap{align-self:flex-start}
+.typing-bubble{
+  padding:14px 18px;background:var(--surface);border:1px solid var(--border2);
+  border-radius:14px;border-bottom-left-radius:4px;
+  display:flex;gap:5px;align-items:center;
+}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--text3);animation:pulse 1.3s infinite}
+.dot:nth-child(2){animation-delay:.2s}
+.dot:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,80%,100%{opacity:.25;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+
+.chat-input-area{
+  padding:16px 24px;background:var(--bg2);border-top:1px solid var(--border);
+  flex-shrink:0;
+}
+.input-row{display:flex;gap:10px;align-items:flex-end}
+.chat-ta{
+  flex:1;padding:12px 16px;
+  background:var(--surface);border:1px solid var(--border2);border-radius:12px;
+  color:var(--text);font-family:var(--ff-body);font-size:13px;
+  outline:none;resize:none;min-height:46px;max-height:120px;line-height:1.6;
+  transition:border .2s;
+}
+.chat-ta:focus{border-color:var(--gold)}
+.chat-ta::placeholder{color:var(--text3)}
+.send-btn{
+  padding:12px 22px;
+  background:linear-gradient(135deg,#b8902a,#c9a84c);
+  border:none;border-radius:12px;
+  color:#080a0f;font-family:var(--ff-body);font-size:12px;font-weight:600;
+  letter-spacing:.04em;cursor:pointer;transition:opacity .2s;
+  white-space:nowrap;
+}
+.send-btn:hover{opacity:.85}
+.send-btn:disabled{opacity:.4;cursor:not-allowed}
+
+
+/* ── API KEY BANNER ── */
+.key-banner{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:10px 24px;
+  background:rgba(201,168,76,.07);
+  border-bottom:1px solid rgba(201,168,76,.2);
+  flex-shrink:0;
+}
+.key-banner.saved{background:rgba(52,211,153,.05);border-bottom-color:rgba(52,211,153,.15)}
+.key-label{font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--gold);white-space:nowrap}
+.key-banner.saved .key-label{color:var(--green)}
+.key-input{
+  flex:1;min-width:200px;max-width:440px;
+  padding:7px 12px;
+  background:var(--surface2);border:1px solid rgba(201,168,76,.3);border-radius:8px;
+  color:var(--text);font-family:var(--ff-mono);font-size:12px;outline:none;
+  letter-spacing:.04em;
+}
+.key-input:focus{border-color:var(--gold)}
+.key-input::placeholder{color:var(--text3);font-family:var(--ff-body);letter-spacing:0}
+.key-save-btn{
+  padding:7px 16px;background:var(--gold);border:none;border-radius:8px;
+  color:#080a0f;font-family:var(--ff-body);font-size:11px;font-weight:600;
+  letter-spacing:.04em;cursor:pointer;transition:opacity .2s;white-space:nowrap;
+}
+.key-save-btn:hover{opacity:.85}
+.key-status{font-size:11px;color:var(--green);display:none}
+.key-banner.saved .key-status{display:block}
+.key-banner.saved .key-save-btn{background:var(--surface2);color:var(--text2);border:1px solid var(--border2)}
+.key-hint{font-size:10px;color:var(--text3);flex-basis:100%;margin-top:2px}
+
+/* Subtle grain overlay */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:.4;
+}
+
+/* No results */
+.no-results{text-align:center;padding:60px 20px;color:var(--text3)}
+.no-results p{font-size:13px}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- HEADER -->
+<header>
+  <div class="logo">CFA <span style="color:var(--gold);font-family:var(--ff-head);font-weight:400">III</span> <span>· Curtis Holloway · Private Wealth Pathway · Aug 2026</span></div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showPage('lib',this)">Equation Library</button>
+    <button class="tab-btn" onclick="showPage('chat',this)">AI Tutor</button>
+    <button class="tab-btn" onclick="showPage('quiz',this)">Quiz Mode</button>
+    <button class="tab-btn" onclick="showPage('identify',this)">Identify Formula</button>
+    <button class="tab-btn" onclick="showPage('analytics',this)">Analytics</button>
+  </div>
+  <div class="header-badge">Schweser + CFA Curriculum</div>
+</header>
+
+<!-- ══ LIBRARY PAGE ══ -->
+<div class="page active" id="page-lib">
+<div class="lib-layout">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sb-section">
+      <div class="sb-label">Browse</div>
+      <button class="sb-btn active" onclick="filterCat('all',this)">
+        <span class="sb-dot" style="background:var(--text3)"></span>All Topics
+        <span class="sb-count" id="cnt-all">—</span>
+      </button>
+    </div>
+    <div class="sb-section">
+      <div class="sb-label">Sections</div>
+      <button class="sb-btn" onclick="filterCat('AA',this)">
+        <span class="sb-dot" style="background:#4a7cf8"></span>Asset Allocation
+        <span class="sb-count" id="cnt-AA">—</span>
+      </button>
+      <button class="sb-btn" onclick="filterCat('IPS',this)">
+        <span class="sb-dot" style="background:#2dd4bf"></span>Institutional / IPS
+        <span class="sb-count" id="cnt-IPS">—</span>
+      </button>
+      <button class="sb-btn" onclick="filterCat('PC',this)">
+        <span class="sb-dot" style="background:#a78bfa"></span>Portfolio Construction
+        <span class="sb-count" id="cnt-PC">—</span>
+      </button>
+      <button class="sb-btn" onclick="filterCat('PERF',this)">
+        <span class="sb-dot" style="background:#34d399"></span>Performance Measurement
+        <span class="sb-count" id="cnt-PERF">—</span>
+      </button>
+      <button class="sb-btn" onclick="filterCat('DERIV',this)">
+        <span class="sb-dot" style="background:#f87171"></span>Derivatives & Risk Mgmt
+        <span class="sb-count" id="cnt-DERIV">—</span>
+      </button>
+      <button class="sb-btn" onclick="filterCat('PW',this)">
+        <span class="sb-dot" style="background:#c9a84c"></span>Private Wealth
+        <span class="sb-count" id="cnt-PW">—</span>
+      </button>
+      <button class="sb-btn" onclick="filterCat('ALTS',this)">
+        <span class="sb-dot" style="background:#f97316"></span>Alternative Investments
+        <span class="sb-count" id="cnt-ALTS">—</span>
+      </button>
+    </div>
+    <div class="sb-section">
+      <div class="sb-label">Type</div>
+      <button class="sb-btn" onclick="filterType('formula',this)">
+        <span class="sb-dot" style="background:var(--gold)"></span>Formulas only
+      </button>
+      <button class="sb-btn" onclick="filterType('concept',this)">
+        <span class="sb-dot" style="background:var(--purple)"></span>Concepts only
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <div class="lib-main" id="lib-main">
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="search-input" placeholder="Search formulas, variables, concepts, LOS…" oninput="doSearch()">
+    </div>
+    <div id="content-area"></div>
+  </div>
+</div>
+</div>
+
+<!-- ══ CHAT PAGE ══ -->
+<div class="page" id="page-chat">
+<div class="chat-page">
+
+  <!-- API KEY BANNER -->
+  <div class="key-banner" id="key-banner">
+    <span class="key-label" id="key-label">⚿ Anthropic API Key</span>
+    <input class="key-input" id="key-input" type="password"
+      placeholder="sk-ant-api03-…  (saved locally in your browser, never sent anywhere else)"
+      onkeydown="if(event.key==='Enter')saveKey()">
+    <button class="key-save-btn" id="key-save-btn" onclick="saveKey()">Save key</button>
+    <span class="key-status" id="key-status">✓ Key saved — AI Tutor is ready</span>
+    <div class="key-hint" id="key-hint">Get your key at console.anthropic.com → API Keys. Stored only in this browser.</div>
+  </div>
+
+  <div class="chat-topbar">
+    <div class="topbar-group">
+      <span class="topbar-label">Model</span>
+      <select class="model-sel" id="model-sel">
+        <option value="claude-sonnet-4-20250514">Sonnet 4 — Best balance</option>
+        <option value="claude-opus-4-20250514">Opus 4 — Deepest reasoning</option>
+        <option value="claude-haiku-4-5-20251001">Haiku 4.5 — Fastest</option>
+      </select>
+    </div>
+    <div class="topbar-group">
+      <label class="ctx-toggle">
+        <input type="checkbox" id="ctx-on" checked>
+        <span style="font-size:11px;color:var(--text2)">CFA III context</span>
+      </label>
+    </div>
+    <button class="clear-btn" onclick="clearChat()">Clear chat</button>
+  </div>
+
+  <div class="chat-msgs" id="chat-msgs">
+    <div class="empty-chat" id="empty-chat">
+      <div class="empty-title">CFA III AI Tutor</div>
+      <div class="empty-sub">Ask about any formula from the compendium, paste a rearranged equation to identify it, or request a numerical example. Claude knows your full curriculum.</div>
+      <div class="quick-grid">
+        <button class="quick-q" onclick="qa('Walk me through the Grinold–Kroner model with a worked numerical example')">Grinold–Kroner numerical</button>
+        <button class="quick-q" onclick="qa('Explain Singer–Terhaar: full integration vs segmentation and when each applies')">Singer–Terhaar integration</button>
+        <button class="quick-q" onclick="qa('I have: A_i = (w_i − W_i)(B_i − B) — which model is this and how does it differ from BHB?')">Identify Brinson–Fachler</button>
+        <button class="quick-q" onclick="qa('Explain the Fundamental Law of Active Management: IR = IC × √BR with a real example')">Fundamental Law of AM</button>
+        <button class="quick-q" onclick="qa('Walk through BPVHR and show me how to calculate the number of futures contracts to hit a duration target')">Duration hedge with futures</button>
+        <button class="quick-q" onclick="qa('Explain the RV gift vs bequest formula and when it is optimal to gift now')">Gift vs bequest RV formula</button>
+        <button class="quick-q" onclick="qa('What is the H-model? Show all rearrangements and a numerical example solving for H')">H-model → solve for H</button>
+        <button class="quick-q" onclick="qa('Explain variance swaps, the settlement formula, and how vega notional relates to variance notional')">Variance swaps deep dive</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-input-area">
+    <div class="input-row">
+      <textarea class="chat-ta" id="chat-ta" placeholder="Ask about any formula, paste a rearranged equation, or request a worked example…" rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"
+        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMsg()">Send ↑</button>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ QUIZ PAGE ══ -->
+<div class="page" id="page-quiz">
+<div class="chat-page">
+  <div class="chat-topbar" style="gap:20px;flex-wrap:wrap">
+    <div class="topbar-group">
+      <span class="topbar-label">Topic</span>
+      <select class="model-sel" id="quiz-topic">
+        <option value="Asset Allocation & Capital Market Expectations">Asset Allocation</option>
+        <option value="Portfolio Construction — Fixed Income">Fixed Income Construction</option>
+        <option value="Performance Measurement & Attribution">Performance Attribution</option>
+        <option value="Derivatives & Risk Management">Derivatives</option>
+        <option value="Private Wealth Management & Tax Planning" selected>Private Wealth</option>
+        <option value="Institutional IPS & Investment Policy">Institutional IPS</option>
+        <option value="all CFA Level III topics">All Topics (mixed)</option>
+      </select>
+    </div>
+    <div class="topbar-group">
+      <span class="topbar-label">Difficulty</span>
+      <select class="model-sel" id="quiz-diff">
+        <option value="conceptual">Conceptual</option>
+        <option value="calculation-based" selected>Calculation</option>
+        <option value="application and synthesis">Application</option>
+      </select>
+    </div>
+    <div class="topbar-group">
+      <span class="topbar-label">Model</span>
+      <select class="model-sel" id="quiz-model">
+        <option value="claude-sonnet-4-20250514" selected>Sonnet 4</option>
+        <option value="claude-opus-4-20250514">Opus 4 — hardest Qs</option>
+        <option value="claude-haiku-4-5-20251001">Haiku 4.5 — fast</option>
+      </select>
+    </div>
+    <button class="key-save-btn" onclick="generateQuiz()" id="gen-btn" style="margin-left:auto">Generate Question ↻</button>
+  </div>
+  <div class="chat-msgs" id="quiz-area" style="padding:28px 32px">
+    <div class="empty-chat">
+      <div class="empty-title">Quiz Mode</div>
+      <div class="empty-sub">Claude generates a CFA-style item set for your chosen topic and difficulty. Answer in the box below — Claude grades it, identifies the gap, and explains the correct approach.</div>
+      <div class="quick-grid" style="margin-top:16px">
+        <button class="quick-q" onclick="document.getElementById('quiz-topic').value='Private Wealth Management & Tax Planning';generateQuiz()">Private Wealth question</button>
+        <button class="quick-q" onclick="document.getElementById('quiz-topic').value='Performance Measurement & Attribution';generateQuiz()">Attribution question</button>
+        <button class="quick-q" onclick="document.getElementById('quiz-topic').value='Derivatives & Risk Management';generateQuiz()">Derivatives question</button>
+        <button class="quick-q" onclick="document.getElementById('quiz-topic').value='all CFA Level III topics';document.getElementById('quiz-diff').value='application and synthesis';generateQuiz()">Random hard question</button>
+      </div>
+    </div>
+  </div>
+  <div class="chat-input-area">
+    <div style="font-size:11px;color:var(--text3);margin-bottom:8px;letter-spacing:.03em">TYPE YOUR ANSWER — Claude will grade it and explain</div>
+    <div class="input-row">
+      <textarea class="chat-ta" id="quiz-ta" placeholder="Write your answer here — show your work for calculation questions…" rows="1"
+        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,160)+'px'"></textarea>
+      <button class="send-btn" id="quiz-submit-btn" onclick="submitQuizAnswer()">Submit ↑</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ IDENTIFY PAGE ══ -->
+<div class="page" id="page-identify">
+<div class="chat-page">
+  <div class="chat-topbar">
+    <span style="font-size:12px;color:var(--text2);font-weight:500">Paste any equation — rearranged, partial, or in any notation — and Claude identifies it instantly</span>
+    <button class="clear-btn" onclick="clearIdentify()" style="margin-left:auto">Clear</button>
+  </div>
+  <div style="padding:28px 32px;flex:1;overflow-y:auto" id="identify-area">
+    <div class="empty-chat" id="identify-empty">
+      <div class="empty-title">Equation Identifier</div>
+      <div class="empty-sub">Paste any formula — rearranged, partial notation, plain text math, or copy-pasted from Kaplan. Claude names it, maps to LOS, defines every variable, and shows all standard forms.</div>
+      <div class="quick-grid" style="margin-top:16px">
+        <button class="quick-q" onclick="identifyEq('r = D1/P0 + g')">r = D1/P0 + g</button>
+        <button class="quick-q" onclick="identifyEq('A_i = (w_i - W_i)(B_i - B)')">A_i = (w_i − W_i)(B_i − B)</button>
+        <button class="quick-q" onclick="identifyEq('NPS = ((MDT - MDP) / MDS) * MVP')">NPS = ((MDT−MDP)/MDS)×MVP</button>
+        <button class="quick-q" onclick="identifyEq('U = E(Rp) - (gamma/2) * Var(Rp)')">U = E(Rp) − γ/2 × Var(Rp)</button>
+        <button class="quick-q" onclick="identifyEq('RV = [1+re(1-tie)]^n * (1-Te) / [1+rg(1-tig)]^n')">RV bequest/gift formula</button>
+        <button class="quick-q" onclick="identifyEq('IR = IC * sqrt(BR)')">IR = IC × √BR</button>
+      </div>
+    </div>
+    <div id="identify-results"></div>
+  </div>
+  <div class="chat-input-area">
+    <div class="input-row">
+      <textarea class="chat-ta" id="identify-ta" placeholder="Paste equation here — any notation, rearranged form, or plain English description…" rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();runIdentify()}"
+        oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"></textarea>
+      <button class="send-btn" onclick="runIdentify()">Identify ↑</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ ANALYTICS PAGE ══ -->
+<div class="page" id="page-analytics">
+<div style="padding:28px 32px;overflow-y:auto;flex:1">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+    <div>
+      <div style="font-family:var(--ff-head);font-size:20px;font-weight:600;color:var(--text)">Study Analytics</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:3px">Tracks every formula you open and every AI query — resets when you clear browser data</div>
+    </div>
+    <button class="clear-btn" onclick="clearAnalytics()">Reset data</button>
+  </div>
+
+  <!-- Summary cards -->
+  <div id="analytics-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:28px"></div>
+
+  <!-- Section heat map -->
+  <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:12px">Section Heat Map — opens per section</div>
+  <div id="heatmap" style="display:flex;flex-direction:column;gap:8px;margin-bottom:28px"></div>
+
+  <!-- Top formulas -->
+  <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:12px">Most Drilled Formulas</div>
+  <div id="top-formulas" style="display:flex;flex-direction:column;gap:6px;margin-bottom:28px"></div>
+
+  <!-- AI queries log -->
+  <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:12px">Recent AI Queries</div>
+  <div id="query-log" style="display:flex;flex-direction:column;gap:6px"></div>
+</div>
+</div>
+
+</div><!-- /shell -->
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA — all equations and concepts from the compendium
+// ═══════════════════════════════════════════════════
+const DATA = [
+
+// ── ASSET ALLOCATION ──────────────────────────────
+{id:1,cat:'AA',type:'formula',name:'Taylor Rule — Target Interest Rate',los:'CME',
+ formulaHtml:`<span class="math-display">n<sub>target</sub> = r<sub>neutral</sub> + i<sub>expected</sub> + 0.5(GDP<sub>expected</sub> − GDP<sub>trend</sub>) + 0.5(i<sub>expected</sub> − i<sub>target</sub>)</span>`,
+ vars:[
+   ['n<sub>target</sub>','Target nominal short-term rate'],
+   ['r<sub>neutral</sub>','Neutral real short-term rate'],
+   ['i<sub>expected</sub>','Expected inflation rate'],
+   ['GDP<sub>expected</sub>','Expected GDP growth rate'],
+   ['GDP<sub>trend</sub>','Long-term trend GDP growth'],
+   ['i<sub>target</sub>','Central bank inflation target'],
+ ],
+ rearr:[
+   'r<sub>neutral</sub> = n<sub>target</sub> − i<sub>expected</sub> − 0.5(GDP<sub>expected</sub> − GDP<sub>trend</sub>) − 0.5(i<sub>expected</sub> − i<sub>target</sub>)',
+ ],
+ note:'Each gap (GDP and inflation) carries equal weight of 0.5. Used to anchor short-rate forecasts in capital market expectations.',
+},
+
+{id:2,cat:'AA',type:'formula',name:'Grinold–Kroner Model — Expected Equity Return',los:'CME',
+ formulaHtml:`<span class="math-display">E(R<sub>e</sub>) ≈ <span class="frac"><span class="num">D</span><span class="den">P</span></span> + (%ΔE − %ΔS) + %ΔP/E</span>`,
+ vars:[
+   ['D/P','Dividend yield'],
+   ['%ΔE','Expected % change in earnings (≈ nominal GDP growth)'],
+   ['%ΔS','% change in shares outstanding (negative = buybacks add value)'],
+   ['%ΔP/E','Expected repricing return; set to 0 for long-run forecasts'],
+ ],
+ rearr:[
+   '%ΔP/E = E(R<sub>e</sub>) − D/P − (%ΔE − %ΔS)',
+   '%ΔS = D/P + %ΔE + %ΔP/E − E(R<sub>e</sub>)',
+ ],
+ note:'For long-run equilibrium, set %ΔP/E = 0. Repricing component is the cyclical/tactical overlay.',
+},
+
+{id:3,cat:'AA',type:'formula',name:'Risk Premium Approach — Expected Bond Return',los:'CME',
+ formulaHtml:`<span class="math-display">E(R<sub>b</sub>) = r<sub>f</sub> + Term Premium + Credit Premium + Liquidity Premium</span>`,
+ vars:[
+   ['r<sub>f</sub>','Risk-free rate (short-term government)'],
+   ['Term Premium','Compensation for duration / interest rate risk'],
+   ['Credit Premium','Compensation for default risk'],
+   ['Liquidity Premium','Compensation for illiquidity relative to benchmark'],
+ ],
+ rearr:['Credit Premium = E(R<sub>b</sub>) − r<sub>f</sub> − Term Premium − Liquidity Premium'],
+ note:'Building-block approach. Each premium is estimated separately and summed.',
+},
+
+{id:4,cat:'AA',type:'formula',name:'Singer–Terhaar — Full Integration',los:'CME',
+ formulaHtml:`<span class="math-display">RP<sub>i</sub> = ρ<sub>i,M</sub> · σ<sub>i</sub> · (Market Sharpe Ratio)</span>`,
+ vars:[
+   ['RP<sub>i</sub>','Risk premium for asset i'],
+   ['ρ<sub>i,M</sub>','Correlation of asset i with global market portfolio'],
+   ['σ<sub>i</sub>','Standard deviation of asset i returns'],
+   ['Market SR','Global market Sharpe ratio = E(R<sub>M</sub> − r<sub>f</sub>) / σ<sub>M</sub>'],
+ ],
+ rearr:['ρ<sub>i,M</sub> = RP<sub>i</sub> / (σ<sub>i</sub> × Market SR)'],
+ note:'Full integration assumes asset is fully accessible to global investors. Illiquid/segmented assets require blending with segmentation formula.',
+},
+
+{id:5,cat:'AA',type:'formula',name:'Singer–Terhaar — Full Segmentation',los:'CME',
+ formulaHtml:`<span class="math-display">RP<sub>i</sub> = σ<sub>i</sub> · (Market Sharpe Ratio)</span>`,
+ vars:[
+   ['RP<sub>i</sub>','Risk premium for asset i (fully segmented market)'],
+   ['σ<sub>i</sub>','Standard deviation of asset i returns'],
+ ],
+ note:'Fully segmented: ρ=1 (asset only priced against itself). Blended RP = degree of integration × RP_integrated + degree of segmentation × RP_segmented.',
+},
+
+{id:6,cat:'AA',type:'formula',name:'Singer–Terhaar — Weighted Average RP',los:'CME',
+ formulaHtml:`<span class="math-display">RP<sub>i</sub> = (degree of integration)(ERP<sub>integration</sub>) + (degree of segmentation)(ERP<sub>segmentation</sub>)</span>`,
+ vars:[
+   ['degree of integration','Weight applied to fully integrated RP (0–1)'],
+   ['degree of segmentation','= 1 − degree of integration'],
+   ['ERP<sub>integration</sub>','Risk premium under full integration'],
+   ['ERP<sub>segmentation</sub>','Risk premium under full segmentation'],
+ ],
+ note:'Final blended RP. Emerging markets typically have partial segmentation; real assets are highly segmented.',
+},
+
+{id:7,cat:'AA',type:'formula',name:'Commercial Real Estate — Cap Rate',los:'CME',
+ formulaHtml:`<span class="math-display">Cap Rate = <span class="frac"><span class="num">NOI</span><span class="den">Property Value</span></span></span>`,
+ vars:[
+   ['NOI','Net operating income (annual)'],
+   ['Property Value','Current market value of property'],
+ ],
+ rearr:['Property Value = NOI / Cap Rate','NOI = Cap Rate × Property Value'],
+ note:'E(R_re) = Cap Rate + NOI Growth (going concern). For finite holding period: add −%ΔCap Rate term.',
+},
+
+{id:8,cat:'AA',type:'formula',name:'CRE — Finite Holding Period Expected Return',los:'CME',
+ formulaHtml:`<span class="math-display">E(R<sub>re</sub>) = Cap Rate + NOI Growth − %ΔCap Rate</span>`,
+ vars:[
+   ['Cap Rate','Initial cap rate at purchase'],
+   ['NOI Growth','Annual growth in net operating income'],
+   ['%ΔCap Rate','Change in cap rate over holding period (positive = cap rate compression → gain)'],
+ ],
+ note:'Cap rate compression (falling cap rate) adds to return. Rising cap rates (duration risk) reduce total return.',
+},
+
+{id:9,cat:'AA',type:'formula',name:'Utility Maximization — Asset Allocation',los:'AA',
+ formulaHtml:`<span class="math-display">U<sub>m</sub> = E(R<sub>m</sub>) − 0.005 × λ × Var<sub>m</sub></span>`,
+ vars:[
+   ['U<sub>m</sub>','Utility score for allocation m'],
+   ['E(R<sub>m</sub>)','Expected return of portfolio m (%)'],
+   ['λ','Risk aversion coefficient (higher = more risk averse)'],
+   ['Var<sub>m</sub>','Portfolio variance (%)'],
+ ],
+ rearr:['λ = (E(R<sub>m</sub>) − U<sub>m</sub>) / (0.005 × Var<sub>m</sub>)'],
+ note:'0.005 factor arises from convention of expressing returns/variance in %. Surplus version uses E(R_surplus) and Var_surplus.',
+},
+
+{id:10,cat:'AA',type:'formula',name:'ARCH Model — Variance Forecast',los:'CME',
+ formulaHtml:`<span class="math-display">σ<sub>t</sub><sup>2</sup> = γ + α·σ<sub>t−1</sub><sup>2</sup> + β·η<sub>t</sub><sup>2</sup> = γ + (α+β)·σ<sub>t−1</sub><sup>2</sup> + β(η<sub>t</sub><sup>2</sup> − σ<sub>t−1</sub><sup>2</sup>)</span>`,
+ vars:[
+   ['σ<sub>t</sub><sup>2</sup>','Forecast variance for period t'],
+   ['γ','Long-run average variance (constant)'],
+   ['α','Weight on prior variance; α+β < 1 for stationarity'],
+   ['β','Weight on surprise variance component'],
+   ['η<sub>t</sub>','Unexpected return component (residual)'],
+ ],
+ note:'Higher α+β → volatility clustering. Used for illiquid asset classes where smoothed returns understate true variance.',
+},
+
+{id:11,cat:'AA',type:'formula',name:'Smoothed Returns — Volatility Estimation',los:'CME',
+ formulaHtml:`<span class="math-display">R<sub>t</sub> = (1 − λ)·r<sub>t</sub> + λ·R<sub>t−1</sub> &nbsp;&nbsp;|&nbsp;&nbsp; var(r) = <span class="frac"><span class="num">1+λ</span><span class="den">1−λ</span></span>·var(R)</span>`,
+ vars:[
+   ['R<sub>t</sub>','Smoothed return for period t'],
+   ['r<sub>t</sub>','Raw reported return'],
+   ['λ','Smoothing parameter (0–1); higher λ = more smoothing'],
+   ['var(r)','True underlying variance'],
+   ['var(R)','Observed (smoothed) variance'],
+ ],
+ note:'Unsmoothed variance always exceeds smoothed. Divide (1+λ)/(1−λ) > 1 always. Used to correct apparent low volatility of private assets.',
+},
+
+// ── IPS / INSTITUTIONAL ─────────────────────────
+{id:12,cat:'IPS',type:'formula',name:'Change in Market Value of Equity — Banks/Insurers',los:'IPS',
+ formulaHtml:`<span class="math-display">%ΔE = %ΔA · M − %ΔL · (M − 1)</span>`,
+ vars:[
+   ['%ΔE','% change in value of equity'],
+   ['%ΔA','% change in value of assets'],
+   ['%ΔL','% change in value of liabilities'],
+   ['M','Leverage multiplier = Assets / Equity'],
+ ],
+ rearr:['M = (%ΔE + %ΔL · M − %ΔL) / %ΔA  (iterative)'],
+ note:'Shows leverage amplification of asset/liability moves on equity capital. Key for bank/insurer IPS construction.',
+},
+
+{id:13,cat:'IPS',type:'formula',name:'Duration of Equity — Bank/Insurer',los:'IPS',
+ formulaHtml:`<span class="math-display">D<sub>E</sub> = D<sub>A</sub> · M − D<sub>L</sub> · (M − 1) · <span class="frac"><span class="num">Δi</span><span class="den">Δy</span></span></span>`,
+ vars:[
+   ['D<sub>E</sub>','Modified duration of equity capital'],
+   ['D<sub>A</sub>','Modified duration of assets'],
+   ['D<sub>L</sub>','Modified duration of liabilities'],
+   ['M','Leverage multiplier = A/E'],
+   ['Δi/Δy','Estimated change in liability yield per unit change in asset yield'],
+ ],
+ note:'If Δi/Δy = 1 (liabilities reprice 1:1 with assets), simplifies to D_E = D_A·M − D_L·(M−1).',
+},
+
+{id:14,cat:'IPS',type:'formula',name:'Volatility of Equity Capital — Banks/Insurers',los:'IPS',
+ formulaHtml:`<span class="math-display">σ<sub>E</sub> = √[ M<sup>2</sup>·σ<sub>A</sub><sup>2</sup> + (M−1)<sup>2</sup>·σ<sub>L</sub><sup>2</sup> − 2·M·(M−1)·σ<sub>A</sub>·σ<sub>L</sub>·ρ<sub>AL</sub> ]</span>`,
+ vars:[
+   ['σ<sub>E</sub>','Standard deviation of % change in equity market value'],
+   ['σ<sub>A</sub>','SD of % changes in asset value'],
+   ['σ<sub>L</sub>','SD of % changes in liability value'],
+   ['ρ<sub>AL</sub>','Correlation between asset and liability value changes'],
+   ['M','Leverage multiplier'],
+ ],
+ note:'High ρ_AL (asset-liability comovement) dramatically reduces equity volatility — the basis of LDI / immunization strategies.',
+},
+
+// ── PORTFOLIO CONSTRUCTION ───────────────────────
+{id:15,cat:'PC',type:'formula',name:'Herfindahl–Hirschman Index (HHI)',los:'PC',
+ formulaHtml:`<span class="math-display">HHI = <span class="sigma">∑</span><sub>i=1</sub><sup>n</sup> w<sub>i</sub><sup>2</sup> &nbsp;&nbsp;|&nbsp;&nbsp; Effective # Stocks = <span class="frac"><span class="num">1</span><span class="den">HHI</span></span></span>`,
+ vars:[
+   ['w<sub>i</sub>','Weight of stock i in portfolio (decimal)'],
+   ['HHI','Range: 1/n (equal weight) to 1 (single stock)'],
+   ['1/HHI','Effective number of stocks — concentration-adjusted count'],
+ ],
+ note:'Equal-weight portfolio: HHI = 1/n, effective n = n. Single-stock: HHI=1, effective n=1. Used in equity portfolio concentration analysis.',
+},
+
+{id:16,cat:'PC',type:'formula',name:'Effective Duration (from Curve Shift)',los:'PC',
+ formulaHtml:`<span class="math-display">Effective Duration = <span class="frac"><span class="num">PV<sub>−</sub> − PV<sub>+</sub></span><span class="den">2 · ΔCurve · PV<sub>0</sub></span></span></span>`,
+ vars:[
+   ['PV<sub>0</sub>','Current portfolio / bond value'],
+   ['PV<sub>−</sub>','Value when benchmark curve shifts down by ΔCurve'],
+   ['PV<sub>+</sub>','Value when benchmark curve shifts up by ΔCurve'],
+   ['ΔCurve','Parallel shift in benchmark curve (decimal, e.g. 0.0001)'],
+ ],
+ note:'Model-independent duration — captures optionality. Standard shift is ±50bps. For option-free bonds, matches modified duration.',
+},
+
+{id:17,cat:'PC',type:'formula',name:'Effective Convexity',los:'PC',
+ formulaHtml:`<span class="math-display">Effective Convexity = <span class="frac"><span class="num">PV<sub>−</sub> + PV<sub>+</sub> − 2·PV<sub>0</sub></span><span class="den">(ΔCurve)<sup>2</sup> · PV<sub>0</sub></span></span></span>`,
+ vars:[
+   ['PV<sub>−</sub>, PV<sub>+</sub>, PV<sub>0</sub>','Down-shifted, up-shifted, and current prices'],
+   ['ΔCurve','Parallel shift size'],
+ ],
+ note:'Positive convexity adds value (both shifts give price > linear approximation). Callable bonds and MBS can have negative convexity.',
+},
+
+{id:18,cat:'PC',type:'formula',name:'Price Change — Duration + Convexity',los:'PC',
+ formulaHtml:`<span class="math-display">ΔP ≈ (−MD × ΔY) + (<span class="frac"><span class="num">1</span><span class="den">2</span></span> · C · ΔY<sup>2</sup>)</span>`,
+ vars:[
+   ['MD','Modified duration'],
+   ['ΔY','Change in yield (decimal)'],
+   ['C','Convexity (full convexity, not ÷ by 2 already)'],
+ ],
+ rearr:['For spread view: replace ΔY with ΔS (spread change)'],
+ note:'Convexity term always positive for option-free bonds. First-order (duration) dominates for small yield moves.',
+},
+
+{id:19,cat:'PC',type:'formula',name:'Expected Return Decomposition — Fixed Income',los:'PC',
+ formulaHtml:`<span class="math-display">E(R) = Coupon Income + Rolldown Return + Curve Change Return + Spread Change Return</span>`,
+ vars:[
+   ['Coupon Income','Annual coupon / Current bond price'],
+   ['Rolldown Return','(Projected end price − Begin price) / Begin price (no curve change assumption)'],
+   ['Curve Change Return','−MD × ΔY + ½ × C × ΔY²'],
+   ['Spread Change Return','−MD × ΔS + ½ × C × ΔS²'],
+ ],
+ note:'Rolling yield = Coupon Income + Rolldown Return. This is the "carry" component assuming curve unchanged.',
+},
+
+{id:20,cat:'PC',type:'formula',name:'Leveraged Portfolio Return',los:'PC',
+ formulaHtml:`<span class="math-display">r<sub>P</sub> = r<sub>I</sub> + <span class="frac"><span class="num">V<sub>B</sub></span><span class="den">V<sub>E</sub></span></span> · (r<sub>I</sub> − r<sub>B</sub>)</span>`,
+ vars:[
+   ['r<sub>P</sub>','Return on total portfolio (equity perspective)'],
+   ['r<sub>I</sub>','Return on invested assets (total portfolio including borrowed)'],
+   ['r<sub>B</sub>','Borrowing rate (cost of leverage)'],
+   ['V<sub>B</sub>','Amount borrowed'],
+   ['V<sub>E</sub>','Equity invested (own capital)'],
+ ],
+ rearr:['r<sub>I</sub> − r<sub>B</sub> = (r<sub>P</sub> − r<sub>I</sub>) · V<sub>E</sub> / V<sub>B</sub>  (spread earned per unit leverage)'],
+ note:'Leverage amplifies both gains and losses. If r_I < r_B, leverage destroys value.',
+},
+
+{id:21,cat:'PC',type:'formula',name:'VWAP Transaction Cost',los:'PC',
+ formulaHtml:`<span class="math-display">VWAP Cost<sub>sell</sub> = Trade Size × (Benchmark VWAP − Trade VWAP)<br>VWAP Cost<sub>buy</sub> = Trade Size × (Trade VWAP − Benchmark VWAP)</span>`,
+ vars:[
+   ['Trade VWAP','Volume-weighted avg price of actual trades'],
+   ['Benchmark VWAP','VWAP of the market over the same window'],
+ ],
+ note:'Negative cost = favorable execution. Effective spread = 2 × |Transaction price − Midquote|.',
+},
+
+// ── PERFORMANCE MEASUREMENT ─────────────────────
+{id:22,cat:'PERF',type:'formula',name:'Brinson–Hood–Beebower (BHB) Allocation Effect',los:'PERF',
+ formulaHtml:`<span class="math-display">A<sub>i</sub> = (w<sub>i</sub> − W<sub>i</sub>) · B<sub>i</sub></span>`,
+ vars:[
+   ['A<sub>i</sub>','Allocation effect for sector i'],
+   ['w<sub>i</sub>','Portfolio weight in sector i'],
+   ['W<sub>i</sub>','Benchmark weight in sector i'],
+   ['B<sub>i</sub>','Benchmark return for sector i'],
+ ],
+ note:'BHB rewards OW of sectors with above-zero return. Brinson–Fachler (below) is more economically meaningful.',
+},
+
+{id:23,cat:'PERF',type:'formula',name:'Brinson–Fachler Allocation Effect',los:'PERF',
+ formulaHtml:`<span class="math-display">A<sub>i</sub> = (w<sub>i</sub> − W<sub>i</sub>) · (B<sub>i</sub> − B)</span>`,
+ vars:[
+   ['A<sub>i</sub>','Allocation effect (Brinson–Fachler)'],
+   ['w<sub>i</sub> − W<sub>i</sub>','Active weight in sector i'],
+   ['B<sub>i</sub>','Benchmark sector return'],
+   ['B','Overall benchmark return'],
+ ],
+ note:'More intuitive: OW a sector that beats the total benchmark = positive allocation effect. Eliminates BHB anchor bias.',
+},
+
+{id:24,cat:'PERF',type:'formula',name:'Security Selection Effect',los:'PERF',
+ formulaHtml:`<span class="math-display">S<sub>i</sub> = W<sub>i</sub> · (R<sub>i</sub> − B<sub>i</sub>)</span>`,
+ vars:[
+   ['S<sub>i</sub>','Selection effect for sector i'],
+   ['W<sub>i</sub>','Benchmark weight in sector i'],
+   ['R<sub>i</sub>','Portfolio sector return'],
+   ['B<sub>i</sub>','Benchmark sector return'],
+ ],
+ note:'Measures pure stock-picking ability within a sector at benchmark weights.',
+},
+
+{id:25,cat:'PERF',type:'formula',name:'Interaction Effect',los:'PERF',
+ formulaHtml:`<span class="math-display">I<sub>i</sub> = (w<sub>i</sub> − W<sub>i</sub>) · (R<sub>i</sub> − B<sub>i</sub>)</span>`,
+ vars:[
+   ['I<sub>i</sub>','Interaction effect: joint contribution of active weight + active return'],
+   ['w<sub>i</sub> − W<sub>i</sub>','Active weight'],
+   ['R<sub>i</sub> − B<sub>i</sub>','Active sector return (selection)'],
+ ],
+ note:'Total active return = ΣA_i + ΣS_i + ΣI_i. Some attribution systems combine selection + interaction.',
+},
+
+{id:26,cat:'PERF',type:'formula',name:'Sharpe Ratio',los:'PERF',
+ formulaHtml:`<span class="math-display">SR = <span class="frac"><span class="num">R̄<sub>A</sub> − r̄<sub>f</sub></span><span class="den">σ̂<sub>A</sub></span></span></span>`,
+ vars:[
+   ['R̄<sub>A</sub>','Mean portfolio return'],
+   ['r̄<sub>f</sub>','Mean risk-free rate'],
+   ['σ̂<sub>A</sub>','Standard deviation of portfolio returns (total risk)'],
+ ],
+ note:'Uses total risk. Appropriate when portfolio = investor\'s only risky holding. Not suitable for alternatives (non-normal returns).',
+},
+
+{id:27,cat:'PERF',type:'formula',name:'Information Ratio',los:'PERF',
+ formulaHtml:`<span class="math-display">IR = <span class="frac"><span class="num">E(r<sub>P</sub>) − E(r<sub>B</sub>)</span><span class="den">σ(r<sub>P</sub> − r<sub>B</sub>)</span></span></span>`,
+ vars:[
+   ['E(r<sub>P</sub>) − E(r<sub>B</sub>)','Expected active return (alpha)'],
+   ['σ(r<sub>P</sub> − r<sub>B</sub>)','Tracking error (active risk)'],
+ ],
+ rearr:['IR = IC × √BR  (Fundamental Law of Active Management)'],
+ note:'IR is the consistency-adjusted measure of alpha. IR > 0.5 = above average. Log IR uses ln(1+R_P) − ln(1+R_B).',
+},
+
+{id:28,cat:'PERF',type:'formula',name:'Appraisal Ratio',los:'PERF',
+ formulaHtml:`<span class="math-display">AR = <span class="frac"><span class="num">α</span><span class="den">σ<sub>ε</sub></span></span></span>`,
+ vars:[
+   ['α','Jensen\'s alpha (regression intercept)'],
+   ['σ<sub>ε</sub>','Standard deviation of residual (idiosyncratic) risk'],
+ ],
+ note:'Measures alpha per unit of non-systematic risk taken. Key input in Treynor–Black model. AR² = SR²(P) − SR²(M).',
+},
+
+{id:29,cat:'PERF',type:'formula',name:'Sortino Ratio',los:'PERF',
+ formulaHtml:`<span class="math-display">SR<sub>D</sub> = <span class="frac"><span class="num">E(r<sub>P</sub>) − r<sub>T</sub></span><span class="den">σ<sub>D</sub></span></span></span>`,
+ vars:[
+   ['r<sub>T</sub>','Minimum acceptable return (MAR)'],
+   ['σ<sub>D</sub>','Downside semi-standard deviation (only negative deviations from MAR)'],
+ ],
+ note:'Preferred when return distribution is non-normal. Penalizes only downside volatility. Better for alternatives.',
+},
+
+{id:30,cat:'PERF',type:'formula',name:'Carhart 4-Factor Model',los:'PERF',
+ formulaHtml:`<span class="math-display">R<sub>p</sub> − R<sub>f</sub> = α<sub>p</sub> + b<sub>p1</sub>·RMRF + b<sub>p2</sub>·SMB + b<sub>p3</sub>·HML + b<sub>p4</sub>·WML + ε</span>`,
+ vars:[
+   ['RMRF','Market excess return (MKT − R<sub>f</sub>)'],
+   ['SMB','Small minus Big: size factor'],
+   ['HML','High minus Low: value factor (book-to-price)'],
+   ['WML','Winners minus Losers: momentum factor'],
+   ['b<sub>pi</sub>','Factor loading / beta'],
+ ],
+ note:'Extension of Fama–French 3-factor. Positive WML loading = momentum tilt. Used for returns-based attribution.',
+},
+
+{id:31,cat:'PERF',type:'formula',name:'Time-Weighted Rate of Return (TWRR)',los:'PERF',
+ formulaHtml:`<span class="math-display">R<sub>TWRR</sub> = [(1+R<sub>1</sub>)(1+R<sub>2</sub>)···(1+R<sub>t</sub>)] − 1</span>`,
+ vars:[
+   ['R<sub>i</sub>','Sub-period return between cash flows'],
+ ],
+ note:'Eliminates effect of external cash flows. Preferred for evaluating manager skill. GIPS requires TWRR (or Modified Dietz for large flows).',
+},
+
+{id:32,cat:'PERF',type:'formula',name:'Benchmark Quality Decomposition',los:'PERF',
+ formulaHtml:`<span class="math-display">P = M + S + A &nbsp;&nbsp;where&nbsp;&nbsp; S = B − M, &nbsp; A = P − B</span>`,
+ vars:[
+   ['P','Manager portfolio return'],
+   ['M','Market index return'],
+   ['B','Style benchmark return'],
+   ['S = B − M','Style return (excess return of benchmark over market)'],
+   ['A = P − B','Active return (manager\'s alpha vs style benchmark)'],
+ ],
+ note:'Decomposition ensures attribution sums to total return. Active return A is the pure manager contribution.',
+},
+
+{id:33,cat:'PERF',type:'formula',name:'Statistical Significance — t-Statistic',los:'PERF',
+ formulaHtml:`<span class="math-display">t = <span class="frac"><span class="num">sample mean</span><span class="den">sample SD</span></span> × √N</span>`,
+ vars:[
+   ['sample mean','Average active return over N periods'],
+   ['sample SD','Standard deviation of active returns'],
+   ['N','Number of periods in sample'],
+ ],
+ note:'Need t > 2 for ~95% confidence. Long track records required: IR=0.5 needs ~16 years for significance at 5% level.',
+},
+
+// ── DERIVATIVES ─────────────────────────────────
+{id:34,cat:'DERIV',type:'formula',name:'Put-Call Parity',los:'DERIV',
+ formulaHtml:`<span class="math-display">c<sub>0</sub> − p<sub>0</sub> = S<sub>0</sub> − PV(X) &nbsp;⟺&nbsp; S<sub>0</sub> + p<sub>0</sub> = c<sub>0</sub> + PV(X)</span>`,
+ vars:[
+   ['c<sub>0</sub>','Call option price'],
+   ['p<sub>0</sub>','Put option price'],
+   ['S<sub>0</sub>','Current spot price of underlying'],
+   ['PV(X)','Present value of strike = X·e<sup>−rT</sup> (continuous) or X/(1+r)<sup>T</sup>'],
+ ],
+ rearr:[
+   'p<sub>0</sub> = c<sub>0</sub> + PV(X) − S<sub>0</sub>  (synthetic put)',
+   'c<sub>0</sub> = p<sub>0</sub> + S<sub>0</sub> − PV(X)  (synthetic call)',
+   'S<sub>0</sub> = c<sub>0</sub> − p<sub>0</sub> + PV(X)  (synthetic stock)',
+ ],
+ note:'Violation = risk-free arbitrage. Synthetic long forward = long call + short put. Synthetic positions enable tax/regulatory optimization.',
+},
+
+{id:35,cat:'DERIV',type:'formula',name:'Notional Principal of Interest Rate Swap',los:'DERIV',
+ formulaHtml:`<span class="math-display">NP<sub>S</sub> = <span class="frac"><span class="num">(MD<sub>T</sub> − MD<sub>P</sub>)</span><span class="den">MD<sub>S</sub></span></span> × MV<sub>P</sub></span>`,
+ vars:[
+   ['NP<sub>S</sub>','Notional swap principal'],
+   ['MD<sub>T</sub>','Target modified duration'],
+   ['MD<sub>P</sub>','Current portfolio modified duration'],
+   ['MD<sub>S</sub>','Modified duration of the swap (payer swap has negative MD)'],
+   ['MV<sub>P</sub>','Market value of portfolio'],
+ ],
+ rearr:['MD<sub>T</sub> = MD<sub>P</sub> + (NP<sub>S</sub> × MD<sub>S</sub>) / MV<sub>P</sub>'],
+ note:'Payer swap (pay fixed, receive float) reduces duration. Receiver swap increases duration. Sign of MD_S depends on swap type.',
+},
+
+{id:36,cat:'DERIV',type:'formula',name:'BPV Hedge Ratio (BPVHR)',los:'DERIV',
+ formulaHtml:`<span class="math-display">BPVHR = <span class="frac"><span class="num">BPV<sub>target</sub> − BPV<sub>portfolio</sub></span><span class="den">BPV<sub>CTD</sub></span></span> × CF</span>`,
+ vars:[
+   ['BPV','Basis Point Value = MD × 0.0001 × MV'],
+   ['CTD','Cheapest-to-deliver bond underlying futures contract'],
+   ['CF','Conversion factor for CTD bond'],
+   ['BPVHR','Number of futures contracts (short to reduce duration)'],
+ ],
+ rearr:['BPV<sub>target</sub> = MD<sub>target</sub> × 0.0001 × MV<sub>portfolio</sub>'],
+ note:'Negative BPVHR = short futures (reducing duration). For full immunization, BPV_target = BPV_liabilities.',
+},
+
+{id:37,cat:'DERIV',type:'formula',name:'Number of Equity Futures — Beta Adjustment',los:'DERIV',
+ formulaHtml:`<span class="math-display">N = <span class="frac"><span class="num">β<sub>T</sub> − β<sub>P</sub></span><span class="den">β<sub>F</sub></span></span> × <span class="frac"><span class="num">MV<sub>P</sub></span><span class="den">Futures Price × Multiplier</span></span></span>`,
+ vars:[
+   ['β<sub>T</sub>','Target portfolio beta'],
+   ['β<sub>P</sub>','Current portfolio beta'],
+   ['β<sub>F</sub>','Futures beta (beta of underlying index ≈ 1.0)'],
+   ['MV<sub>P</sub>','Market value of portfolio'],
+ ],
+ note:'Positive N = buy futures (increase beta). Negative = sell futures (reduce beta). Used for tactical equity exposure adjustment.',
+},
+
+{id:38,cat:'DERIV',type:'formula',name:'Variance Swap — Settlement & Profit/Loss',los:'DERIV',
+ formulaHtml:`<span class="math-display">Settlement<sub>T</sub> = N<sub>VAR</sub> × (Realized Variance − Variance Strike)<br><br>P/L = N<sub>vega</sub> × <span class="frac"><span class="num">σ<sup>2</sup> − K<sup>2</sup></span><span class="den">2K</span></span></span>`,
+ vars:[
+   ['N<sub>VAR</sub>','Variance notional (dollar per variance unit)'],
+   ['N<sub>vega</sub>','Vega notional = 2K × N<sub>VAR</sub>'],
+   ['σ<sup>2</sup>','Annualized realized variance (daily var × 252)'],
+   ['K<sup>2</sup>','Variance strike (implied vol squared)'],
+ ],
+ rearr:['N<sub>VAR</sub> = N<sub>vega</sub> / (2K)'],
+ note:'Long variance swap = receive realized var, pay strike. Profitable when realized vol > implied vol. No initial premium.',
+},
+
+{id:39,cat:'DERIV',type:'formula',name:'Currency Return — Domestic from Foreign Asset',los:'DERIV',
+ formulaHtml:`<span class="math-display">R<sub>DC</sub> ≈ R<sub>FC</sub> + R<sub>FX</sub> + R<sub>FC</sub>·R<sub>FX</sub> ≈ R<sub>FC</sub> + R<sub>FX</sub></span>`,
+ vars:[
+   ['R<sub>DC</sub>','Return in domestic currency'],
+   ['R<sub>FC</sub>','Return on foreign asset in foreign currency'],
+   ['R<sub>FX</sub>','Return on foreign currency vs domestic (% appreciation)'],
+ ],
+ rearr:['R<sub>FX</sub> ≈ R<sub>DC</sub> − R<sub>FC</sub>  (currency contribution)'],
+ note:'Cross-product term R_FC × R_FX typically small. Foreign asset variance: σ²(R_DC) ≈ σ²(R_FC) + σ²(R_FX) + 2·σ(R_FC)·σ(R_FX)·ρ',
+},
+
+{id:40,cat:'DERIV',type:'formula',name:'Probability of Fed Funds Rate Change',los:'DERIV',
+ formulaHtml:`<span class="math-display">p<sub>change</sub> = <span class="frac"><span class="num">r<sub>implied by futures</sub> − r<sub>current target</sub></span><span class="den">r<sub>assuming change</sub> − r<sub>current target</sub></span></span></span>`,
+ vars:[
+   ['r<sub>implied by futures</sub>','Fed funds rate implied by futures price'],
+   ['r<sub>current target</sub>','Current Fed funds target rate'],
+   ['r<sub>assuming change</sub>','Expected rate if change occurs (target ± step)'],
+ ],
+ note:'Fed funds futures price = 100 − expected rate. Numerator = expected change priced in; denominator = full step size.',
+},
+
+// ── PRIVATE WEALTH ──────────────────────────────
+{id:41,cat:'PW',type:'formula',name:'After-Tax Future Value — Accrual Taxes',los:'PW',
+ formulaHtml:`<span class="math-display">FV = [1 + R(1 − t<sub>x</sub>)]<sup>T</sup></span>`,
+ vars:[
+   ['R','Pre-tax return'],
+   ['t<sub>x</sub>','Ordinary income tax rate'],
+   ['T','Investment horizon (years)'],
+ ],
+ note:'All returns taxed annually as ordinary income (e.g., interest). Effective after-tax rate = R(1−t_x) per period.',
+},
+
+{id:42,cat:'PW',type:'formula',name:'After-Tax FV — Deferred Capital Gain (with Basis)',los:'PW',
+ formulaHtml:`<span class="math-display">FV = (1+R)<sup>T</sup>(1 − t<sub>cg</sub>) + t<sub>cg</sub> − (1−B)·t<sub>cg</sub> = (1+R)<sup>T</sup>(1 − t<sub>cg</sub>) + B·t<sub>cg</sub></span>`,
+ vars:[
+   ['t<sub>cg</sub>','Capital gains tax rate'],
+   ['B','Cost basis as proportion of current market value'],
+   ['T','Holding period'],
+ ],
+ rearr:['FV (zero basis, B=0) = (1+R)<sup>T</sup>(1 − t<sub>cg</sub>) + t<sub>cg</sub>'],
+ note:'Higher basis B → lower embedded gain → lower effective tax drag. Tax-loss harvesting raises B toward 1.0.',
+},
+
+{id:43,cat:'PW',type:'formula',name:'Portfolio Utility — Taxable Investors',los:'PW',
+ formulaHtml:`<span class="math-display">U = (1−t<sub>x</sub>) · [pretax E(R) − <span class="frac"><span class="num">γ</span><span class="den">2</span></span> · pretax Variance · (1−t<sub>x</sub>)]</span>`,
+ vars:[
+   ['t<sub>x</sub>','Tax rate'],
+   ['γ','Risk aversion coefficient'],
+ ],
+ note:'After-tax utility scales both return and risk by (1−t_x). Increases risk tolerance relative to pre-tax analysis because tax shares downside.',
+},
+
+{id:44,cat:'PW',type:'formula',name:'Relative Value — Gift Now vs Bequest at Death',los:'PW',
+ formulaHtml:`<span class="math-display">RV = <span class="frac"><span class="num">FV after-tax to receiver if bequeathed</span><span class="den">FV after-tax to receiver if gifted now</span></span></span>`,
+ vars:[
+   ['RV > 1','Bequest at death preferred'],
+   ['RV < 1','Gift now preferred (tax efficient to transfer early)'],
+ ],
+ rearr:[
+   'RV (tax-free gift) = [1+r<sub>e</sub>(1−t<sub>ie</sub>)]<sup>n</sup>(1−T<sub>e</sub>) / [1+r<sub>g</sub>(1−t<sub>ig</sub>)]<sup>n</sup>',
+   'RV (taxable gift, receiver pays) = ÷ (1−T<sub>g</sub>) in denominator',
+   'RV (taxable gift, giver pays) = ÷ (1−T<sub>g</sub>+T<sub>g</sub>T<sub>e</sub>) in denominator',
+ ],
+ note:'r_e and t_ie = estate\'s pretax return and tax rate. r_g and t_ig = recipient\'s. T_e = estate tax; T_g = gift tax.',
+},
+
+{id:45,cat:'PW',type:'formula',name:'Human Life Value (HLV)',los:'PW',
+ formulaHtml:`<span class="math-display">HLV = <span class="sigma">∑</span><sub>j=1</sub><sup>n</sup> <span class="frac"><span class="num">(1−t<sub>ins</sub>) · [(income)(1−t<sub>emp</sub>) + benefits − expense] · (1+g)<sup>j</sup></span><span class="den">(1+r)<sup>j−1</sup></span></span></span>`,
+ vars:[
+   ['t<sub>ins</sub>','Tax rate on life insurance proceeds'],
+   ['t<sub>emp</sub>','Tax rate on employment income'],
+   ['g','Annual income growth rate'],
+   ['r','Discount rate'],
+   ['n','Mortality-adjusted expected working years'],
+ ],
+ note:'Replacement value of the insured\'s future earnings stream. Used to size life insurance need.',
+},
+
+{id:46,cat:'PW',type:'formula',name:'Survival Probability — Joint Life (Couple)',los:'PW',
+ formulaHtml:`<span class="math-display">P(survival) = P(husband) + P(wife) − [P(husband) × P(wife)]</span>`,
+ vars:[
+   ['P(survival)','Probability at least one spouse is alive'],
+   ['P(husband), P(wife)','Individual survival probabilities to age j'],
+ ],
+ note:'Joint-life probability always exceeds individual. Longevity risk for couples is substantially higher than for individuals.',
+},
+
+{id:47,cat:'PW',type:'formula',name:'Annuity Payment — Finite Horizon with Growth',los:'PW',
+ formulaHtml:`<span class="math-display">Initial Payment = <span class="frac"><span class="num">Lump Sum × (E[r] − g)</span><span class="den">1 − <span class="frac"><span class="num">1+g</span><span class="den">1+E[r]</span></span><sup>N</sup></span></span></span>`,
+ vars:[
+   ['E[r]','Expected return / discount rate'],
+   ['g','Growth rate of payments (inflation-linked)'],
+   ['N','Number of payment periods'],
+ ],
+ rearr:['If g = E[r]: Initial Payment = Lump Sum × (1+E[r]) / N'],
+ note:'Gordon Growth annuity formula. If g = r, denominator = N/(1+r), simplifying to payment = Lump Sum(1+r)/N.',
+},
+
+{id:48,cat:'PW',type:'formula',name:'Expected Return — High Yield Bonds',los:'PW',
+ formulaHtml:`<span class="math-display">E(R) = [(1 − PD) × YTM] − [PD × LGD]</span>`,
+ vars:[
+   ['PD','Annual probability of default'],
+   ['YTM','Yield to maturity (promised yield)'],
+   ['LGD','Loss given default (positive; = 1 − Recovery Rate)'],
+ ],
+ rearr:['PD = (YTM − E(R)) / (YTM + LGD)'],
+ note:'Expected return < YTM always for HY bonds. Spread over IG bonds compensates for PD × LGD expected loss.',
+},
+
+{id:49,cat:'PW',type:'formula',name:'Funding Ratio and Funding Ratio Return',los:'PW',
+ formulaHtml:`<span class="math-display">FR = <span class="frac"><span class="num">Assets</span><span class="den">Liabilities</span></span> &nbsp;&nbsp;|&nbsp;&nbsp; FR Return = <span class="frac"><span class="num">1 + Asset Return</span><span class="den">1 + Liability Return</span></span> − 1</span>`,
+ vars:[
+   ['FR','Funding ratio (>1 = overfunded)'],
+   ['Asset Return','Return on asset portfolio'],
+   ['Liability Return','Growth rate in PV of liabilities'],
+ ],
+ note:'Goal: FR return > 0 (assets grow faster than liabilities). Deficit = FR < 1. Used in DB plan and endowment LDI contexts.',
+},
+
+{id:50,cat:'PW',type:'formula',name:'Net Asset Decline — FX Liability Risk',los:'PW',
+ formulaHtml:`<span class="math-display">Net Asset Decline = Return<sub>base currency</sub> × (Assets<sub>base</sub> − Liabilities<sub>base</sub>)</span>`,
+ vars:[
+   ['Return<sub>base currency</sub>','S<sub>t,P/B</sub>/S<sub>t−1,P/B</sub> − 1 (base currency return in price-currency terms)'],
+   ['Assets<sub>base</sub> − Liabilities<sub>base</sub>','Net asset position in base currency'],
+ ],
+ note:'FX-denominated liabilities offset FX asset exposure. Net currency exposure = asset − liability position in each currency.',
+},
+
+// ── ALTERNATIVES ────────────────────────────────
+{id:51,cat:'ALTS',type:'formula',name:'Private Equity NAV Calculation',los:'ALTS',
+ formulaHtml:`<span class="math-display">NAV<sub>t</sub> = [NAV<sub>t−1</sub> × (1 + growth rate)] + Contributions<sub>t</sub> − Distributions<sub>t</sub></span>`,
+ vars:[
+   ['NAV<sub>t</sub>','Net asset value at end of period t'],
+   ['growth rate','Expected return on PE fund during period'],
+   ['Contributions<sub>t</sub>','% to be called × Committed Capital'],
+   ['Distributions<sub>t</sub>','% to be distributed × NAV<sub>t−1</sub>(1 + growth rate)'],
+ ],
+ note:'J-curve: early periods have negative cash flow (calls without distributions). Distributions typically begin 3–5 years into fund life.',
+},
+
+{id:52,cat:'ALTS',type:'formula',name:'Rebate Rate — Securities Lending',los:'ALTS',
+ formulaHtml:`<span class="math-display">Rebate Rate = Collateral Earnings Rate − Securities Lending Rate</span>`,
+ vars:[
+   ['Collateral Earnings Rate','Return earned on cash collateral posted by short seller'],
+   ['Securities Lending Rate','Fee charged by lender to borrower'],
+ ],
+ note:'Higher demand to borrow (hard-to-borrow stocks) → higher lending rate → lower rebate rate for borrower. Negative rebate = expensive short.',
+},
+
+// ── CONCEPTS ──────────────────────────────────────────────
+{id:100,cat:'AA',type:'concept',name:'Asset Class Construction Principles',
+ bullets:[
+   '<b>Similar assets:</b> Assets within a class behave similarly and don\'t fit into more than one class',
+   '<b>Low correlation:</b> Classes have low correlation with each other, covering all investable assets',
+   '<b>Liquid:</b> Classes must be sufficiently liquid for implementation',
+   '<b>MVO pitfalls:</b> Estimating inputs, concentrated allocations, single-period framework, ignores liabilities',
+   '<b>Reverse optimization:</b> Solve for implied E(R) given market weights — avoids garbage-in problem',
+   '<b>Black–Litterman:</b> Adjust reverse-optimized returns with manager views, then resolve efficient frontier',
+ ]},
+
+{id:101,cat:'AA',type:'concept',name:'Rebalancing — Calendar vs Percentage Range',
+ bullets:[
+   '<b>Calendar rebalancing:</b> Done at a set frequency (monthly, quarterly). Simple but ignores drift severity',
+   '<b>Percentage range:</b> Triggered when allocation drifts outside tolerance band. More responsive but complex',
+   '<b>Wider bands appropriate when:</b> Higher transaction costs, higher asset class correlations, higher risk tolerance, momentum market environment, less volatile asset classes',
+   '<b>Narrower bands when:</b> Low transaction costs, low correlations, high risk aversion, mean-reverting markets',
+ ]},
+
+{id:102,cat:'IPS',type:'concept',name:'IPS Components — Private Client',
+ bullets:[
+   '<b>Risk tolerance:</b> Willingness AND ability. Low = high priority goals + near-term time horizon',
+   '<b>Time horizon:</b> Described as a range. Multiple objectives → different horizon for each',
+   '<b>Asset allocation:</b> Strategic long-term target + tactical range (active management)',
+   '<b>Constraints:</b> Liquidity, taxes, legal/regulatory, unique preferences',
+   '<b>Wealth manager duties:</b> Formulate IPS, construct portfolio, monitor/rebalance, manage costs, report performance',
+   '<b>IPS appendix:</b> Modeled portfolio performance and capital market expectations',
+ ]},
+
+{id:103,cat:'IPS',type:'concept',name:'DB vs DC Plans — Key Differences',
+ bullets:[
+   '<b>DB liabilities:</b> PV of future promised benefits; higher when: longer employment, higher salaries, longer lives, lower turnover, lower discount rate',
+   '<b>DC liabilities:</b> None to sponsor once contribution made; liability is participant\'s',
+   '<b>DB time horizon:</b> Longer with higher proportion of active (vs retired) lives',
+   '<b>Liquidity needs DB:</b> Higher with more retired lives, higher funded status, participant flexibility',
+   '<b>DB investment objective:</b> Achieve long-term target return to meet contractual liabilities',
+   '<b>External constraints DB:</b> ERISA (US), IORP II (EU), ASC 715 requires funded status on GAAP balance sheet',
+ ]},
+
+{id:104,cat:'IPS',type:'concept',name:'Sovereign Wealth Funds — 5 Types',
+ bullets:[
+   '<b>Budget Stabilization:</b> Linked to commodity/economic cycle. Short horizon, highest liquidity, capital preservation objective',
+   '<b>Development:</b> Socioeconomic investments. Medium/long term, low liquidity, real growth > GDP objective',
+   '<b>Savings:</b> Future generations. Long term, low liquidity, maintain real perpetual spending',
+   '<b>Reserve:</b> Yield on government bonds. Long-term liabilities, intermediate liquidity',
+   '<b>Pension Reserve:</b> Future pension payments. Long term, liquidity rises in decumulation. Earn returns to fund unfunded government pensions',
+   '<b>Governance:</b> ISWF Santiago Principles; generally tax exempt',
+ ]},
+
+{id:105,cat:'DERIV',type:'concept',name:'Option Strategy Selection Matrix',
+ bullets:[
+   '<b>Bearish + vol decrease:</b> Write calls',
+   '<b>Bearish + vol unchanged:</b> Write calls and buy puts',
+   '<b>Bearish + vol increase:</b> Buy puts',
+   '<b>Neutral + vol decrease:</b> Write straddle',
+   '<b>Neutral + vol unchanged:</b> Calendar spread',
+   '<b>Neutral + vol increase:</b> Buy straddle or buy calls',
+   '<b>Bullish + vol decrease:</b> Write puts',
+   '<b>Bullish + vol unchanged:</b> Buy calls and write puts',
+   '<b>Bullish + vol increase:</b> Buy calls',
+ ]},
+
+{id:106,cat:'DERIV',type:'concept',name:'Common Option Strategies',
+ bullets:[
+   '<b>Covered call:</b> Long stock + short call. Sells upside for premium income. Max gain = strike − cost + premium',
+   '<b>Protective put:</b> Long stock + long put. Limits downside, retains upside (minus premium paid)',
+   '<b>Bull spread:</b> Long lower-strike + short higher-strike (calls or puts). Limited gain and loss',
+   '<b>Bear spread:</b> Inverse of bull spread',
+   '<b>Collar:</b> Long stock + long put + short call. Identical payoff to bull spread but includes underlying',
+   '<b>Straddle:</b> Long call + long put, same strike. Profits from large moves either direction',
+   '<b>Volatility smile:</b> OTM options have higher implied vol — U-shaped curve vs strike',
+   '<b>Volatility skew:</b> OTM puts bid up for tail hedging; OTM calls relatively cheap',
+ ]},
+
+{id:107,cat:'DERIV',type:'concept',name:'Interest Rate Swap Applications',
+ bullets:[
+   '<b>Floating liability → Fixed:</b> Enter payer swap (pay fixed, receive float). Use when rates expected to rise',
+   '<b>Fixed liability → Floating:</b> Enter receiver swap. Use when rates expected to fall',
+   '<b>Floating asset → Fixed:</b> Receiver swap. Beneficial when rates expected to fall',
+   '<b>Fixed asset → Floating:</b> Payer swap. Beneficial when rates expected to rise',
+   '<b>Duration reduction:</b> Payer swap has negative duration; reduces portfolio duration',
+   '<b>Duration increase:</b> Receiver swap has positive duration; increases portfolio duration',
+ ]},
+
+{id:108,cat:'PW',type:'concept',name:'FIBER Scale — Family Business Goals',
+ bullets:[
+   '<b>F — Family control:</b> Desire to keep ownership and decision-making within family',
+   '<b>I — Identification:</b> Family identity tied to the business',
+   '<b>B — Binding social ties:</b> Business as vehicle for family relationships',
+   '<b>E — Emotional attachment:</b> Non-financial attachment to business heritage',
+   '<b>R — Renewal of family bonds:</b> Multi-generational purpose and legacy',
+   'FIBER suggests family businesses have <b>non-financial utility</b> — owners may sacrifice financial return to preserve these dimensions',
+ ]},
+
+{id:109,cat:'PW',type:'concept',name:'Money Scripts — Behavioral Finance',
+ bullets:[
+   '<b>Money worship:</b> Belief that more money = more happiness. Never satisfied. Leads to overwork, risk-taking',
+   '<b>Money status:</b> Wealth = social status, power, intelligence. Status-seeking behavior',
+   '<b>Money avoidance:</b> Money brings bad outcomes. May self-sabotage wealth accumulation',
+   '<b>Money vigilance:</b> Careful and discreet with money; prefer others not know wealth. Risk of under-spending',
+ ]},
+
+{id:110,cat:'PW',type:'concept',name:'Three Tax Scenarios for Gifts',
+ bullets:[
+   '<b>Scenario 1:</b> Gift now is tax-free to both receiver and giver. Best case for early transfer',
+   '<b>Scenario 2:</b> Gift now is taxable; tax paid by receiver. Reduces receiver\'s after-tax amount',
+   '<b>Scenario 3:</b> Gift now is taxable; tax paid by giver. Worst case — giver bears gift tax from taxable estate',
+   '<b>RV > 1:</b> Bequest at death preferred from tax perspective',
+   '<b>RV < 1:</b> Gift now preferred — transfer earlier to grow outside estate',
+ ]},
+
+{id:111,cat:'PW',type:'concept',name:'Wealth Life Cycle — 7 Stages',
+ bullets:[
+   '<b>1. Education:</b> Human capital >> financial capital; borrowing common',
+   '<b>2. Early career:</b> Earnings begin; limited savings; insurance needs emerge',
+   '<b>3. Career development:</b> Earnings accelerate; financial capital growing; mortgage/family',
+   '<b>4. Peak accumulation:</b> Highest savings; portfolio optimization matters most',
+   '<b>5. Preretirement:</b> De-risking begins; liability-matching considerations',
+   '<b>6. Early retirement:</b> Decumulation starts; sequence-of-returns risk critical',
+   '<b>7. Late retirement:</b> Longevity risk; estate planning; healthcare costs',
+ ]},
+
+{id:112,cat:'PERF',type:'concept',name:'Attribution Approaches — Three Types',
+ bullets:[
+   '<b>Returns-based:</b> Regresses portfolio returns against style indices. Low data requirement; subject to style drift',
+   '<b>Holdings-based:</b> Uses beginning-of-period portfolio holdings. More accurate but requires full holdings data',
+   '<b>Transactions-based:</b> Updates holdings-based for intra-period trades. Most accurate; highest data requirement',
+   '<b>Micro attribution:</b> Portfolio manager level — security selection, allocation within/across sectors',
+   '<b>Macro attribution:</b> Fund sponsor level — SAA, TAA, manager selection',
+ ]},
+
+{id:113,cat:'PERF',type:'concept',name:'GIPS — Global Investment Performance Standards',
+ bullets:[
+   'Established standards for <b>ethical presentation</b> of investment performance',
+   'TWRR required (or Modified Dietz for large cash flows)',
+   'Composites must include <b>all fee-paying discretionary accounts</b> in appropriate composite',
+   'Five years of GIPS-compliant history required initially; build to 10 years',
+   'Verification by independent third party is voluntary but recommended',
+   'Firms — not individual funds — claim GIPS compliance',
+ ]},
+
+{id:114,cat:'ALTS',type:'concept',name:'Gini Coefficient — Interpretation',
+ bullets:[
+   '<b>Gini = 0:</b> Perfectly equal distribution; mean = median wealth; each decile controls equal share',
+   '<b>0 < Gini < 1:</b> As coefficient rises, wealth concentration increases; higher skew in distribution',
+   '<b>Gini = 1:</b> Maximum inequality; all wealth held by one individual; mean >> median',
+   'Higher Gini → harder to aggregate demand for products; wealth management market highly concentrated at top',
+ ]},
+
+{id:115,cat:'PW',type:'concept',name:'Goals-Based Planning — Chhabra & Brunel Frameworks',
+ bullets:[
+   '<b>Brunel:</b> Dynamic goals (philanthropy, aspirational), Discretionary lifestyle, Non-discretionary lifestyle (must fund)',
+   '<b>Chhabra:</b> Aspirational (upside seeking), Market (risk/return), Personal (downside protection)',
+   '<b>Process:</b> (1) Describe goals, (2) Quantify and prioritize, (3) Structure sub-portfolios, (4) Manage aggregate',
+   '<b>Extended balance sheet:</b> Assets = financial + human capital + business + deferred comp + real assets',
+   '<b>Liabilities:</b> Debt + PV lifestyle maintenance + PV dynamic goals + PV philanthropy',
+ ]},
+
+{id:116,cat:'IPS',type:'concept',name:'Endowments vs Foundations — Key Differences',
+ bullets:[
+   '<b>Endowment spending:</b> Rule = weighted avg of last period\'s inflation-adjusted spending + fixed rate × avg AUM. Spending rate net of donations typically 2–4%',
+   '<b>Foundation spending:</b> US tax rules require minimum 5% of assets plus investment expenses',
+   '<b>Both:</b> Perpetual time horizon (foundations may have limited life); low liquidity needs',
+   '<b>Endowment objective:</b> Total real return after HEPI inflation of ~5% on 3–5 year rolling basis',
+   '<b>Foundation objective:</b> Real return > CPI + spending rate (min 5%) + expenses on 3–5 year rolling basis',
+ ]},
+
+]; // end DATA
+
+// ═══════════════════════════════════════════════════
+// RENDERING
+// ═══════════════════════════════════════════════════
+const COLORS = {AA:'#4a7cf8',IPS:'#2dd4bf',PC:'#a78bfa',PERF:'#34d399',DERIV:'#f87171',PW:'#c9a84c',ALTS:'#f97316'};
+const LABELS = {AA:'Asset Allocation',IPS:'Institutional / IPS',PC:'Portfolio Construction',PERF:'Performance',DERIV:'Derivatives',PW:'Private Wealth',ALTS:'Alternatives'};
+
+let activeCat='all', activeType='all', searchStr='';
+
+function getFiltered(){
+  return DATA.filter(d=>{
+    if(activeCat!=='all' && d.cat!==activeCat) return false;
+    if(activeType!=='all' && d.type!==activeType) return false;
+    if(searchStr){
+      const q=searchStr.toLowerCase();
+      const hay=(d.name+' '+(d.los||'')+' '+(d.note||'')+' '+(d.vars||[]).map(v=>v[0]+' '+v[1]).join(' ')+' '+(d.bullets||[]).join(' ')).toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function renderAll(){
+  const filtered=getFiltered();
+  const area=document.getElementById('content-area');
+  if(!filtered.length){
+    area.innerHTML='<div class="no-results"><p>No results match your search.</p></div>';
+    return;
+  }
+  // group by category
+  const groups={};
+  filtered.forEach(d=>{ if(!groups[d.cat]) groups[d.cat]=[]; groups[d.cat].push(d); });
+  const order=['AA','IPS','PC','PERF','DERIV','PW','ALTS'];
+  let html='';
+  order.forEach(cat=>{
+    if(!groups[cat]) return;
+    const color=COLORS[cat]||'#888';
+    html+=`<div class="eq-section-header">
+      <div class="eq-section-title">${LABELS[cat]||cat}</div>
+      <div class="eq-section-line"></div>
+      <span class="eq-section-tag" style="background:${color}22;color:${color};border:1px solid ${color}44">${cat}</span>
+    </div>`;
+    const formulas=groups[cat].filter(d=>d.type==='formula');
+    const concepts=groups[cat].filter(d=>d.type==='concept');
+    if(formulas.length){
+      html+='<div class="eq-grid">';
+      formulas.forEach(d=>{ html+=renderFormulaCard(d,color); });
+      html+='</div>';
+    }
+    if(concepts.length){
+      concepts.forEach(d=>{ html+=renderConceptCard(d,color); });
+    }
+  });
+  area.innerHTML=html;
+  // update counts
+  document.getElementById('cnt-all').textContent=DATA.length;
+  ['AA','IPS','PC','PERF','DERIV','PW','ALTS'].forEach(c=>{
+    const el=document.getElementById('cnt-'+c);
+    if(el) el.textContent=DATA.filter(d=>d.cat===c).length;
+  });
+}
+
+function renderFormulaCard(d,color){
+  const vars=(d.vars||[]).map(([s,def])=>`<div class="var-row"><div class="var-sym">${s}</div><div class="var-def">${def}</div></div>`).join('');
+  const rearr=(d.rearr||[]).map(r=>`<span class="rearr-chip" onclick="event.stopPropagation();sendToChat('This is the rearrangement: ${r.replace(/</g,'').replace(/>/g,'').replace(/['"]/g,'')} — explain what solving for this variable reveals and give a numerical example')">${r}</span>`).join('');
+  return `
+  <div class="eq-card" id="card-${d.id}" onclick="toggleCard(${d.id})">
+    <div class="eq-card-head">
+      <div class="eq-card-left">
+        <div class="eq-card-name">${d.name}</div>
+        <div class="eq-card-meta">
+          ${d.los?`<span class="los-pill">${d.los}</span>`:''}
+          <span class="cat-pill" style="color:${color}">${LABELS[d.cat]||d.cat}</span>
+        </div>
+      </div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="formula-preview">${d.formulaHtml}</div>
+    <div class="eq-body">
+      <div class="eq-formula-block">${d.formulaHtml}</div>
+      ${vars?`<div class="eq-vars"><div class="vars-label">Variables</div>${vars}</div>`:''}
+      ${rearr?`<div class="eq-rearrange"><div class="vars-label" style="margin-bottom:8px">Rearrangements — click to ask AI</div><div class="rearr-chips">${rearr}</div></div>`:''}
+      ${d.note?`<div class="eq-note"><p>${d.note}</p></div>`:''}
+      <div class="eq-footer">
+        <span></span>
+        <button class="ask-ai-btn" onclick="event.stopPropagation();sendToChat('Explain the ${d.name.replace(/'/g,'')} in depth — give the formula, define all variables rigorously, show all rearrangements, and provide a worked numerical example.')">Ask AI about this ↗</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderConceptCard(d,color){
+  const bullets=(d.bullets||[]).map(b=>`<li>${b}</li>`).join('');
+  return `
+  <div class="concept-card" id="card-${d.id}" onclick="toggleCard(${d.id})">
+    <div class="concept-head">
+      <div>
+        <div class="concept-title">${d.name}</div>
+        <div class="concept-type" style="color:${color}">Concept &amp; Framework</div>
+      </div>
+      <div class="concept-chevron">▾</div>
+    </div>
+    <div class="concept-body">
+      <ul>${bullets}</ul>
+      <button class="ask-ai-btn" style="margin-top:14px" onclick="event.stopPropagation();sendToChat('Explain ${d.name.replace(/'/g,'')} in the context of CFA Level III. Give key exam points and any quantitative examples.')">Ask AI ↗</button>
+    </div>
+  </div>`;
+}
+
+function toggleCard(id){
+  const el=document.getElementById('card-'+id);
+  el.classList.toggle('open');
+  // Track open inline — no wrapper needed
+  const d=DATA.find(x=>x.id===id);
+  if(d) trackOpen(d.name, d.cat);
+}
+
+function filterCat(cat,btn){
+  activeCat=cat;activeType='all';
+  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function filterType(type,btn){
+  activeType=type;activeCat='all';
+  document.querySelectorAll('.sb-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAll();
+}
+
+function doSearch(){
+  searchStr=document.getElementById('search-input').value.trim();
+  renderAll();
+}
+
+// ═══════════════════════════════════════════════════
+// PAGE NAV
+// ═══════════════════════════════════════════════════
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+  // Render analytics inline when that tab opens
+  if(id==='analytics') renderAnalytics();
+}
+
+// ═══════════════════════════════════════════════════
+// CHAT
+// ═══════════════════════════════════════════════════
+const SYS = `You are an elite CFA Level III tutor and institutional finance advisor. Your primary user is a CFO overseeing $60B+ in mutual fund assets — a senior finance professional who demands precision, brevity, and real-world applicability. Secondary user is a CFA Level III candidate (retaking February 2027, Private Wealth Pathway, priority gaps: Wealth Planning and Portfolio Construction).
+
+RESPONSE STANDARDS — non-negotiable:
+• Crisp and executive: lead with the answer, follow with evidence. No preamble, no "great question", no padding.
+• Quantitative by default: every concept gets a number. If you reference duration, give bps. If you reference IR, give a ratio. If you reference a spread, give bps.
+• Real-world anchored: connect every formula to how it functions in an actual portfolio or institutional context. Reference current market structure where relevant (credit spreads, curve shape, central bank policy).
+• Charts via Chart.js when visual: if the concept benefits from a chart (yield curve, efficient frontier, return decomposition, sensitivity analysis), output a complete self-contained HTML block with Chart.js from cdnjs. Use dark theme: backgroundColor '#0d1018', gridColor '#1e2640', font color '#c8cfe8', accent colors: blue '#4a7cf8', gold '#c9a84c', teal '#2dd4bf'.
+• Formula identification: when shown ANY equation — including rearranged forms — immediately name it, map to LOS, define all variables with sign conventions.
+• Exam precision: flag common exam traps explicitly. Note which answer choices CFA typically uses to mislead.
+• Concise structure: use headers sparingly. Bullet points for variable definitions only. Prose for explanation. Hard cap: if you can say it in 3 sentences, do not use 6.
+
+Chart.js template (use when visual adds value):
+<div style="background:#0d1018;border:1px solid #1e2640;border-radius:10px;padding:16px;margin:8px 0">
+<canvas id="cfaChart_UNIQUEID" height="200"></canvas></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"><\/script>
+<script>
+new Chart(document.getElementById('cfaChart_UNIQUEID'),{
+  type:'line', // or bar, scatter
+  data:{labels:[...],datasets:[{label:'...',data:[...],borderColor:'#4a7cf8',backgroundColor:'rgba(74,124,248,0.1)',tension:0.4}]},
+  options:{plugins:{legend:{labels:{color:'#c8cfe8'}}},scales:{x:{ticks:{color:'#8a94b8'},grid:{color:'#1e2640'}},y:{ticks:{color:'#8a94b8'},grid:{color:'#1e2640'}}},responsive:true,maintainAspectRatio:false}
+});
+<\/script>
+
+Use UNIQUEID like chart1, chart2 etc — never repeat an ID.
+
+Source material: Kaplan Schweser Books 1–3, Private Wealth Pathway, 2026 Quicksheet. Supplement with real-world institutional context freely.`;
+
+let history=[];
+
+function qa(q){
+  document.querySelectorAll('.tab-btn')[1].click();
+  document.getElementById('chat-ta').value=q;
+  sendMsg();
+}
+
+function sendToChat(q){
+  document.querySelectorAll('.tab-btn')[1].click();
+  document.getElementById('chat-ta').value=q;
+  sendMsg();
+}
+
+function clearChat(){
+  history=[];
+  const c=document.getElementById('chat-msgs');
+  c.innerHTML=`<div class="empty-chat" id="empty-chat">
+    <div class="empty-title">CFA III AI Tutor</div>
+    <div class="empty-sub">Ask about any formula from the compendium, paste a rearranged equation to identify it, or request a numerical example.</div>
+    <div class="quick-grid">
+      <button class="quick-q" onclick="qa('Walk me through the Grinold–Kroner model with a worked numerical example')">Grinold–Kroner numerical</button>
+      <button class="quick-q" onclick="qa('Explain Singer–Terhaar integration vs segmentation')">Singer–Terhaar</button>
+      <button class="quick-q" onclick="qa('I have: A_i = (w_i − W_i)(B_i − B) — which model is this?')">Identify Brinson–Fachler</button>
+      <button class="quick-q" onclick="qa('Explain the Fundamental Law: IR = IC × sqrt(BR)')">Fundamental Law</button>
+      <button class="quick-q" onclick="qa('BPVHR — walk through the full duration hedge calculation')">BPVHR hedge ratio</button>
+      <button class="quick-q" onclick="qa('Explain the RV gift vs bequest formula')">Gift vs bequest RV</button>
+      <button class="quick-q" onclick="qa('What is the H-model? All rearrangements and a worked example')">H-model</button>
+      <button class="quick-q" onclick="qa('Variance swaps — settlement formula and vega vs variance notional')">Variance swaps</button>
+    </div>
+  </div>`;
+}
+
+function addMsg(role,text){
+  const ec=document.getElementById('empty-chat');
+  if(ec)ec.remove();
+  const c=document.getElementById('chat-msgs');
+  const d=document.createElement('div');
+  d.className='msg '+role;
+  const model=role==='assistant'?document.getElementById('model-sel').selectedOptions[0].text.split('—')[0].trim():'You';
+  d.innerHTML=`<div class="msg-bubble">${text}</div><div class="msg-meta">${model}</div>`;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+}
+
+function addTyping(){
+  const ec=document.getElementById('empty-chat');
+  if(ec)ec.remove();
+  const c=document.getElementById('chat-msgs');
+  const d=document.createElement('div');
+  d.className='typing-wrap';d.id='typing';
+  d.innerHTML=`<div class="typing-bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  c.appendChild(d);c.scrollTop=c.scrollHeight;
+}
+
+// ── API KEY MANAGEMENT ──
+function getKey(){return localStorage.getItem('cfa_anthropic_key')||'';}
+
+function saveKey(){
+  const raw=document.getElementById('key-input').value.trim();
+  if(!raw){alert('Please paste your API key first.');return;}
+  if(!raw.startsWith('sk-')){alert('That doesn\'t look right — Anthropic keys start with sk-ant-... \nDouble-check you copied the full key.');return;}
+  localStorage.setItem('cfa_anthropic_key',raw);
+  applyKeySaved(raw);
+}
+
+function applyKeySaved(key){
+  const banner=document.getElementById('key-banner');
+  const input=document.getElementById('key-input');
+  const hint=document.getElementById('key-hint');
+  const label=document.getElementById('key-label');
+  const status=document.getElementById('key-status');
+  const saveBtn=document.getElementById('key-save-btn');
+  banner.classList.add('saved');
+  // Mask the displayed key for security
+  input.value=key.slice(0,10)+'••••••••••••••••'+key.slice(-4);
+  input.disabled=true;
+  hint.style.display='none';
+  label.textContent='⚿ API Key';
+  status.style.display='block';
+  saveBtn.textContent='Change key';
+  saveBtn.onclick=resetKey;
+}
+
+function resetKey(){
+  localStorage.removeItem('cfa_anthropic_key');
+  const banner=document.getElementById('key-banner');
+  const input=document.getElementById('key-input');
+  const hint=document.getElementById('key-hint');
+  const label=document.getElementById('key-label');
+  const status=document.getElementById('key-status');
+  const saveBtn=document.getElementById('key-save-btn');
+  banner.classList.remove('saved');
+  input.value='';input.disabled=false;
+  hint.style.display='block';
+  label.textContent='⚿ Anthropic API Key';
+  status.style.display='none';
+  saveBtn.textContent='Save key';
+  saveBtn.onclick=saveKey;
+  input.focus();
+}
+
+// On load — restore saved key if present
+(function initKey(){
+  const k=getKey();
+  if(k)applyKeySaved(k);
+})();
+
+// ── CHAT ──
+async function sendMsg(){
+  const ta=document.getElementById('chat-ta');
+  const text=ta.value.trim();
+  if(!text||document.getElementById('send-btn').disabled)return;
+  // Track query inline
+  if(text) trackQuery(text);
+  const apiKey=getKey();
+  if(!apiKey){
+    // Scroll to key banner and flash it
+    document.getElementById('key-input').focus();
+    const banner=document.getElementById('key-banner');
+    banner.style.transition='background .15s';
+    banner.style.background='rgba(248,113,113,.15)';
+    setTimeout(()=>banner.style.background='',800);
+    addMsg('assistant','⚿ Paste your Anthropic API key in the field above first — then try again.');
+    return;
+  }
+  ta.value='';ta.style.height='auto';
+  addMsg('user',text);
+  history.push({role:'user',content:text});
+  document.getElementById('send-btn').disabled=true;
+  addTyping();
+  const model=document.getElementById('model-sel').value;
+  const useCtx=document.getElementById('ctx-on').checked;
+  try{
+    const body={model,max_tokens:1500,messages:history};
+    if(useCtx)body.system=SYS;
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify(body)
+    });
+    const data=await resp.json();
+    document.getElementById('typing')?.remove();
+    if(data.content?.[0]?.text){
+      const reply=data.content[0].text;
+      history.push({role:'assistant',content:reply});
+      addMsg('assistant',reply);
+    } else if(data.error){
+      const msg=data.error.message||JSON.stringify(data.error);
+      // Give actionable guidance for common errors
+      if(msg.includes('invalid x-api-key')||msg.includes('authentication')){
+        addMsg('assistant','⚿ API key rejected. Click "Change key" above and re-paste it — make sure you copied the full key from console.anthropic.com.');
+      } else if(msg.includes('credit')||msg.includes('balance')){
+        addMsg('assistant','💳 Your API account is out of credits. Go to console.anthropic.com → Billing to add more.');
+      } else {
+        addMsg('assistant','API error: '+msg);
+      }
+    } else {
+      addMsg('assistant','Unexpected response: '+JSON.stringify(data));
+    }
+  }catch(e){
+    document.getElementById('typing')?.remove();
+    if(e.message.includes('fetch')||e.message.includes('network')||e.message.includes('CORS')){
+      addMsg('assistant','Network error — make sure you\'re opening this file directly in Chrome or Firefox (not Safari on some versions). Error: '+e.message);
+    } else {
+      addMsg('assistant','Error: '+e.message);
+    }
+  }
+  document.getElementById('send-btn').disabled=false;
+}
+
+// INIT
+renderAll();
+
+// ═══════════════════════════════════════════════════
+// ANALYTICS TRACKING
+// ═══════════════════════════════════════════════════
+const AKEY='cfa_analytics';
+function getAnalytics(){
+  try{return JSON.parse(localStorage.getItem(AKEY))||{opens:{},aiQueries:[],quizSessions:0,identifySessions:0};}
+  catch{return{opens:{},aiQueries:[],quizSessions:0,identifySessions:0};}
+}
+function saveAnalytics(a){localStorage.setItem(AKEY,JSON.stringify(a));}
+function trackOpen(cardName,cat){
+  const a=getAnalytics();
+  if(!a.opens[cardName])a.opens[cardName]={count:0,cat:cat,last:''};
+  a.opens[cardName].count++;
+  a.opens[cardName].last=new Date().toLocaleDateString();
+  saveAnalytics(a);
+}
+function trackQuery(q){
+  const a=getAnalytics();
+  a.aiQueries.unshift({q:q.slice(0,80),ts:new Date().toLocaleString()});
+  if(a.aiQueries.length>50)a.aiQueries=a.aiQueries.slice(0,50);
+  saveAnalytics(a);
+}
+function clearAnalytics(){
+  if(confirm('Reset all study analytics?')){localStorage.removeItem(AKEY);renderAnalytics();}
+}
+
+// toggleCard tracking is now inline in the original function
+
+// sendMsg tracking is now inline in the original function
+
+function renderAnalytics(){
+  const a=getAnalytics();
+  const opens=a.opens;
+  const totalOpens=Object.values(opens).reduce((s,v)=>s+v.count,0);
+  const totalQueries=a.aiQueries.length;
+  const cats=['AA','IPS','PC','PERF','DERIV','PW','ALTS'];
+  const catLabels={AA:'Asset Allocation',IPS:'Institutional',PC:'Portfolio Construction',PERF:'Performance',DERIV:'Derivatives',PW:'Private Wealth',ALTS:'Alternatives'};
+  const catColors={AA:'#4a7cf8',IPS:'#2dd4bf',PC:'#a78bfa',PERF:'#34d399',DERIV:'#f87171',PW:'#c9a84c',ALTS:'#f97316'};
+
+  // Summary cards
+  const cards=document.getElementById('analytics-cards');
+  if(cards){
+    const topCat=cats.reduce((best,c)=>{
+      const n=Object.values(opens).filter(v=>v.cat===c).reduce((s,v)=>s+v.count,0);
+      const bn=Object.values(opens).filter(v=>v.cat===best).reduce((s,v)=>s+v.count,0);
+      return n>bn?c:best;
+    },cats[0]);
+    cards.innerHTML=[
+      {label:'Formula opens',val:totalOpens||0,color:'var(--blue)'},
+      {label:'AI queries',val:totalQueries||0,color:'var(--gold)'},
+      {label:'Unique formulas',val:Object.keys(opens).length||0,color:'var(--teal)'},
+      {label:'Top section',val:catLabels[topCat]||'—',color:'var(--purple)'},
+    ].map(c=>`<div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);margin-bottom:6px">${c.label}</div>
+      <div style="font-size:22px;font-weight:600;color:${c.color}">${c.val}</div>
+    </div>`).join('');
+  }
+
+  // Heat map
+  const hm=document.getElementById('heatmap');
+  if(hm){
+    const maxCat=Math.max(1,...cats.map(c=>Object.values(opens).filter(v=>v.cat===c).reduce((s,v)=>s+v.count,0)));
+    hm.innerHTML=cats.map(c=>{
+      const count=Object.values(opens).filter(v=>v.cat===c).reduce((s,v)=>s+v.count,0);
+      const pct=Math.round((count/maxCat)*100);
+      const col=catColors[c]||'#888';
+      return `<div style="display:flex;align-items:center;gap:12px">
+        <div style="width:140px;font-size:12px;color:var(--text2);flex-shrink:0">${catLabels[c]}</div>
+        <div style="flex:1;background:var(--surface);border-radius:4px;height:20px;overflow:hidden">
+          <div style="height:100%;width:${pct}%;background:${col};opacity:.7;border-radius:4px;transition:width .4s"></div>
+        </div>
+        <div style="width:32px;text-align:right;font-size:12px;color:var(--text3);font-family:var(--ff-mono)">${count}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Top formulas
+  const tf=document.getElementById('top-formulas');
+  if(tf){
+    const sorted=Object.entries(opens).sort((a,b)=>b[1].count-a[1].count).slice(0,10);
+    if(!sorted.length){tf.innerHTML='<div style="color:var(--text3);font-size:13px">No data yet — start opening formulas in the library.</div>';return;}
+    tf.innerHTML=sorted.map(([name,v],i)=>`<div style="display:flex;align-items:center;gap:12px;padding:8px 12px;background:var(--surface);border-radius:8px;border:1px solid var(--border)">
+      <div style="font-size:11px;font-family:var(--ff-mono);color:var(--text3);width:20px">${i+1}</div>
+      <div style="flex:1;font-size:13px;color:var(--text)">${name}</div>
+      <div style="font-size:11px;color:${catColors[v.cat]||'#888'};font-weight:600">${v.cat}</div>
+      <div style="font-size:12px;font-family:var(--ff-mono);color:var(--text3)">${v.count}×</div>
+    </div>`).join('');
+  }
+
+  // Query log
+  const ql=document.getElementById('query-log');
+  if(ql){
+    if(!a.aiQueries.length){ql.innerHTML='<div style="color:var(--text3);font-size:13px">No AI queries yet.</div>';return;}
+    ql.innerHTML=a.aiQueries.slice(0,15).map(q=>`<div style="padding:8px 12px;background:var(--surface);border-radius:8px;border:1px solid var(--border);display:flex;gap:12px;align-items:baseline">
+      <div style="flex:1;font-size:12px;color:var(--text2)">${q.q}${q.q.length>=80?'…':''}</div>
+      <div style="font-size:10px;color:var(--text3);white-space:nowrap">${q.ts}</div>
+    </div>`).join('');
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// QUIZ MODE
+// ═══════════════════════════════════════════════════
+let quizState={question:'',awaitingAnswer:false};
+
+const QUIZ_SYS=`You are an elite CFA Level III exam question writer and grader. Produce output that matches the precision and format of actual CFA Institute exam questions.
+
+When generating a question:
+- Write a realistic vignette (3-5 sentences of context with specific numbers)
+- Ask ONE focused question requiring formula application or concept synthesis
+- Provide 3 answer choices (A, B, C) where distractors use common exam traps
+- End with exactly: "ANSWER_CHOICES_END"
+
+When grading an answer:
+- State immediately: CORRECT or INCORRECT
+- Give the correct answer with full working
+- Identify the specific trap or gap if wrong
+- Give one exam tip for this question type
+- Be crisp — max 200 words total
+
+Output charts via Chart.js when a visual helps explain the concept. Use dark theme colors: bg #0d1018, grid #1e2640, text #c8cfe8, accent #4a7cf8.`;
+
+async function generateQuiz(){
+  const apiKey=getKey();
+  if(!apiKey){alert('Add your API key in the AI Tutor tab first.');return;}
+  const topic=document.getElementById('quiz-topic').value;
+  const diff=document.getElementById('quiz-diff').value;
+  const model=document.getElementById('quiz-model').value;
+  const area=document.getElementById('quiz-area');
+  const btn=document.getElementById('gen-btn');
+  btn.disabled=true;btn.textContent='Generating…';
+  quizState={question:'',awaitingAnswer:false};
+
+  // Clear and show loading
+  area.innerHTML='<div style="padding:40px;text-align:center;color:var(--text3);font-size:13px">Generating question…</div>';
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model,max_tokens:800,
+        system:QUIZ_SYS,
+        messages:[{role:'user',content:`Generate a ${diff} CFA Level III question on: ${topic}. Include realistic numbers. Format with vignette, question, and 3 answer choices. End with ANSWER_CHOICES_END.`}]
+      })
+    });
+    const data=await resp.json();
+    const q=data.content?.[0]?.text||'Error generating question.';
+    quizState.question=q;
+    quizState.awaitingAnswer=true;
+    area.innerHTML=`<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px;white-space:pre-wrap;font-size:13px;line-height:1.8;color:var(--text)">${q.replace('ANSWER_CHOICES_END','')}</div>`;
+    const a=getAnalytics();a.quizSessions++;saveAnalytics(a);
+  }catch(e){
+    area.innerHTML=`<div style="color:var(--red);padding:20px">Error: ${e.message}</div>`;
+  }
+  btn.disabled=false;btn.textContent='Generate Question ↻';
+}
+
+async function submitQuizAnswer(){
+  if(!quizState.awaitingAnswer){alert('Generate a question first.');return;}
+  const apiKey=getKey();
+  if(!apiKey){alert('Add your API key in the AI Tutor tab first.');return;}
+  const ans=document.getElementById('quiz-ta').value.trim();
+  if(!ans){alert('Write your answer first.');return;}
+  const model=document.getElementById('quiz-model').value;
+  const area=document.getElementById('quiz-area');
+  const btn=document.getElementById('quiz-submit-btn');
+  btn.disabled=true;btn.textContent='Grading…';
+  document.getElementById('quiz-ta').value='';
+
+  // Add user answer bubble
+  area.innerHTML+=`<div style="background:linear-gradient(135deg,#1e3a7a,#162d60);border:1px solid rgba(74,124,248,.3);border-radius:12px;border-bottom-right-radius:4px;padding:14px 18px;margin-bottom:12px;font-size:13px;line-height:1.7;color:#dce8ff"><strong>Your answer:</strong> ${ans}</div>`;
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model,max_tokens:600,
+        system:QUIZ_SYS,
+        messages:[
+          {role:'user',content:`Question:
+${quizState.question}
+
+Candidate answer: ${ans}
+
+Grade this answer. Be crisp and precise.`}
+        ]
+      })
+    });
+    const data=await resp.json();
+    const grade=data.content?.[0]?.text||'Error grading.';
+    const isCorrect=grade.toLowerCase().startsWith('correct');
+    const color=isCorrect?'rgba(52,211,153,.08)':'rgba(248,113,113,.08)';
+    const border=isCorrect?'rgba(52,211,153,.25)':'rgba(248,113,113,.25)';
+    area.innerHTML+=`<div style="background:${color};border:1px solid ${border};border-radius:12px;border-bottom-left-radius:4px;padding:16px 20px;white-space:pre-wrap;font-size:13px;line-height:1.8;color:var(--text)">${grade}</div>`;
+    quizState.awaitingAnswer=false;
+    area.scrollTop=area.scrollHeight;
+    trackQuery('[QUIZ] '+ans.slice(0,60));
+  }catch(e){
+    area.innerHTML+=`<div style="color:var(--red);padding:12px">Error: ${e.message}</div>`;
+  }
+  btn.disabled=false;btn.textContent='Submit ↑';
+}
+
+// ═══════════════════════════════════════════════════
+// EQUATION IDENTIFIER
+// ═══════════════════════════════════════════════════
+const IDENTIFY_SYS=`You are an elite CFA Level III formula identification engine.
+
+When given any equation — rearranged, in plain text, partial, or in any notation — immediately:
+1. NAME: State the formula name and model it belongs to
+2. LOS: Map to the CFA Level III LOS
+3. STANDARD FORM: Show the canonical form with proper notation
+4. VARIABLES: Define every symbol with units and sign conventions (table format, concise)
+5. THIS REARRANGEMENT: Explain what the specific rearranged form is solving for and what it tells you
+6. ALL REARRANGEMENTS: List every useful rearranged form with one-line interpretation each
+7. EXAM TRAP: One critical exam trap for this formula
+
+Be crisp. No preamble. Lead with the name on line 1.
+Generate a Chart.js chart if a visual meaningfully aids understanding. Dark theme: bg #0d1018, grid #1e2640, text #8a94b8, accent colors #4a7cf8, #c9a84c.`;
+
+async function identifyEq(eq){
+  document.getElementById('identify-ta').value=eq;
+  runIdentify();
+}
+
+async function runIdentify(){
+  const apiKey=getKey();
+  if(!apiKey){alert('Add your API key in the AI Tutor tab first.');return;}
+  const ta=document.getElementById('identify-ta');
+  const eq=ta.value.trim();
+  if(!eq)return;
+  ta.value='';
+  const area=document.getElementById('identify-results');
+  const empty=document.getElementById('identify-empty');
+  if(empty)empty.style.display='none';
+
+  const loading=document.createElement('div');
+  loading.style.cssText='padding:16px;color:var(--text3);font-size:13px';
+  loading.textContent='Identifying…';
+  area.prepend(loading);
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:800,
+        system:IDENTIFY_SYS,
+        messages:[{role:'user',content:`Identify this equation: ${eq}`}]
+      })
+    });
+    const data=await resp.json();
+    loading.remove();
+    const result=data.content?.[0]?.text||'Error.';
+    const card=document.createElement('div');
+    card.style.cssText='background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:14px;font-size:13px;line-height:1.8;color:var(--text);white-space:pre-wrap';
+    card.innerHTML=`<div style="font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;font-family:var(--ff-body)">INPUT: <span style="color:var(--gold);font-family:var(--ff-mono)">${eq}</span></div>${result}`;
+    area.prepend(card);
+    const a=getAnalytics();a.identifySessions++;saveAnalytics(a);
+    trackQuery('[IDENTIFY] '+eq.slice(0,60));
+  }catch(e){
+    loading.remove();
+    const err=document.createElement('div');
+    err.style.cssText='color:var(--red);padding:12px;font-size:13px';
+    err.textContent='Error: '+e.message;
+    area.prepend(err);
+  }
+}
+
+function clearIdentify(){
+  document.getElementById('identify-results').innerHTML='';
+  const empty=document.getElementById('identify-empty');
+  if(empty)empty.style.display='';
+}
+
+// showPage analytics hook is now inline in the original function
+
+// INIT ANALYTICS
+renderAnalytics();
+
+</script>
+</body>
+</html>
