@@ -554,9 +554,9 @@ body::before{
     <div class="topbar-group">
       <span class="topbar-label">Model</span>
       <select class="model-sel" id="model-sel">
-        <option value="claude-sonnet-4-20250514">Sonnet 4 — Best balance</option>
-        <option value="claude-opus-4-20250514">Opus 4 — Deepest reasoning</option>
-        <option value="claude-haiku-4-5-20251001">Haiku 4.5 — Fastest</option>
+        <option value="claude-sonnet-4-5">Sonnet 4 — Best balance</option>
+        <option value="claude-opus-4-5">Opus 4 — Deepest reasoning</option>
+        <option value="claude-haiku-4-5">Haiku 4.5 — Fastest</option>
       </select>
     </div>
     <div class="topbar-group">
@@ -624,9 +624,9 @@ body::before{
     <div class="topbar-group">
       <span class="topbar-label">Model</span>
       <select class="model-sel" id="quiz-model">
-        <option value="claude-sonnet-4-20250514" selected>Sonnet 4</option>
-        <option value="claude-opus-4-20250514">Opus 4 — hardest Qs</option>
-        <option value="claude-haiku-4-5-20251001">Haiku 4.5 — fast</option>
+        <option value="claude-sonnet-4-5" selected>Sonnet 4</option>
+        <option value="claude-opus-4-5">Opus 4 — hardest Qs</option>
+        <option value="claude-haiku-4-5">Haiku 4.5 — fast</option>
       </select>
     </div>
     <button class="key-save-btn" onclick="generateQuiz()" id="gen-btn" style="margin-left:auto">Generate Question ↻</button>
@@ -2077,7 +2077,7 @@ async function runIdentify(){
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',max_tokens:800,
+        model:'claude-sonnet-4-5',max_tokens:800,
         system:IDENTIFY_SYS,
         messages:[{role:'user',content:`Identify this equation: ${eq}`}]
       })
